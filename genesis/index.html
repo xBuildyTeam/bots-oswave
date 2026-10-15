@@ -25,6 +25,7 @@ a{color:#18d8ba;text-decoration:none}.foot{color:#6b7f7a;font-size:11px;margin-t
 <div class="g"><div class="bot" id="bot"><img id="img" alt="your dreamed bot"><span class="z">dreaming on Theta...</span></div>
 <div class="info"><p class="say" id="say">Hi! I'm being dreamed...</p><p class="meta" id="m1"></p><p class="meta" id="m2"></p>
 <div class="sib"><button id="prev" type="button">&larr; sibling</button><button id="next" type="button">sibling &rarr;</button></div>
+<p><button id="dl" type="button" disabled>Download bot</button> <span class="meta">Import it in the Bots app in Wave OS.</span></p>
 <p class="meta">Free to dream. No wallet. <a href="/">Meet the bots &rarr;</a></p></div></div>
 <p class="foot">Every bot is computed live by Theta mainnet nodes running Wave Genesis v1, the model contract <a href="https://explorer.thetatoken.org/account/0xfe33d2b4279ec269f4beca499c7a7b704ab54397" target="_blank" rel="noopener">0xfe33…4397</a> (model card #53 on BrainVault). Reading is free: nothing is stored or paid.</p>
 </div><script>
@@ -68,18 +69,29 @@ const str=b=>{const o=word(b,0),n=word(b,o/32);return new TextDecoder().decode(b
 const pad=n=>n.toString(16).padStart(64,'0');
 async function dream(seed){const[svgB,dB]=await Promise.all([call(S_SVG+hx(seed)),call(S_DREAM+hx(seed))]);
  const a=word(dB,1),b=word(dB,2);const[na,nb]=await Promise.all([call(S_NAME+pad(a)),call(S_NAME+pad(b))]);
- return{svg:str(svgB),a:str(na),b:str(nb),ok:word(dB,4)===1,tries:word(dB,5)}}
+ const go=word(dB,0),gl=word(dB,go/32),grid=dB.slice(go+32,go+32+gl);
+ return{svg:str(svgB),grid,ai:a,bi:b,a:str(na),b:str(nb),pal:word(dB,3),mirrored:word(dB,4)===1,tries:word(dB,5)}}
+const PAL=['00e5c03b82f6','3b82f600e5c0','ef4444fde68a','f97316fde68a','facc15ca8a04','22c55ebbf7d0','8b5cf6c4b5fd','ec4899f59e0b','22d3ee0891b2','84cc1615803d','a16207fde68a','f9a8d4f472b6','9ca3afe5e7eb','5fe39af59e0b','475569f59e0b','8b5cf622d3ee'];
+let last=null;
+function design(d,input,kind,n,seed){const P=PAL[d.pal%16],body='#'+P.slice(0,6),second='#'+P.slice(6);const col=['','#0a0a0a',body,second,'#ffffff','#0a0a0a','#0a0a0a'];
+ const px=[],eyes=[],mouth=[];for(let i=0;i<400;i++){const v=d.grid[i];px.push(col[v]||'');if(v===5)eyes.push(i);if(v===6)mouth.push(i)}
+ const nm=(input.trim()+(n?' #'+n:'')).slice(0,40);
+ return{name:nm,color:body,animation:'idle',isTemplate:false,pixels:{px,eyes,mouth,lid:body,mouthColor:second},
+  source:{type:'genesis',modelCardId:'v3:53',contract:GEN,chainId:361,modelVersion:'1.0.0',seed:'0x'+hx(seed),seedInput:input.trim(),seedKind:kind==='word'?'text':kind,sibling:n,parents:{a:d.ai,b:d.bi,aName:d.a,bName:d.b},palette:d.pal,mirrored:d.mirrored,tries:d.tries,edited:false,born:false,dreamedAt:new Date().toISOString()}}}
+function download(){if(!last)return;const blob=new Blob([JSON.stringify(last,null,1)],{type:'application/json'});const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='genesis-'+(last.name.toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,'')||'bot')+'.json';document.body.append(a);a.click();setTimeout(()=>{URL.revokeObjectURL(a.href);a.remove()},500)}
 const $=id=>document.getElementById(id);let cur={input:'wave.theta',n:0},busy=false;
 const kindText={name:'This is the born bot of',wallet:'This bot belongs to wallet',word:'This bot was dreamed from'};
 async function run(){if(busy)return;busy=true;$('go').disabled=true;$('bot').classList.add('busy');$('say').textContent='Dreaming on Theta...';$('m1').textContent='';$('m2').textContent='';
  const {seed,kind}=baseSeed(cur.input);const s=sibling(seed,cur.n);const t0=performance.now();
- try{const d=await dream(s);const ms=Math.round(performance.now()-t0);
+ $('dl').disabled=true;last=null;
+ try{const d=await dream(s);const ms=Math.round(performance.now()-t0);last=design(d,cur.input,kind,cur.n,s);$('dl').disabled=false;
   $('img').src='data:image/svg+xml;base64,'+btoa(unescape(encodeURIComponent(d.svg)));
   const who=cur.input.trim();$('say').innerHTML='';const b=document.createElement('b');b.textContent=who;$('say').append(document.createTextNode((cur.n?'Sibling #'+cur.n+' of ':kindText[kind]+' ')),b);
   $('m1').textContent='Dreamed by Theta nodes in '+(ms/1000).toFixed(1)+'s. Same input, same bot, every time.';$('m2').textContent='Parents: '+d.a+' + '+d.b+' · seed 0x'+hx(s).slice(0,8)+'...'+hx(s).slice(-4);
  }catch(e){$('say').innerHTML='<span class="err">Theta didn\'t answer this time. Try again in a moment.</span>'}
  finally{busy=false;$('go').disabled=false;$('bot').classList.remove('busy');$('prev').disabled=cur.n===0}}
 $('f').onsubmit=e=>{e.preventDefault();const v=$('q').value.trim();if(!v)return;cur={input:v.slice(0,120),n:0};run()};
+$('dl').onclick=download;
 $('next').onclick=()=>{cur.n++;run()};$('prev').onclick=()=>{if(cur.n>0){cur.n--;run()}};
 const u=new URLSearchParams(location.search).get('seed');if(u){$('q').value=u.slice(0,120);cur.input=u.slice(0,120)}
 run();
