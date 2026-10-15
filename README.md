@@ -9,5 +9,4 @@ Static embed host for Wave bots inside posts (X player cards). Wave Web and Wave
 - `/genesis/embed/`: the same page, used as the X player
 - `/genesis/x/`: the page you share on X (player card tags)
 
-No backend, no wallet, no keys. Bots are computed by Theta mainnet nodes through a read-only eth_call
-(preview mode: the call deploys the model inside a simulation; it switches to the permanent contract once Wave OS deploys it).
+No backend, no wallet, no keys. Bots are computed by Theta mainnet nodes through read-only eth_calls to the Wave Genesis v1 contract 0xfe33d2b4279ec269f4beca499c7a7b704ab54397 (manifest: BrainVault v3 card #53, test vectors #52, recipe #51).
