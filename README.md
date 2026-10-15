@@ -2,7 +2,9 @@
 
 Static embed host for Wave bots inside posts (X player cards). Wave Web and Wave OS can't be framed, so embeds live here.
 
-- `/` and anything unknown redirect to https://web.oswave.io/tns/bots.theta
+- `/`: home page with Wavey and Wave Genesis
+- `/wavey/`: chat with Wavey (calls Wave Web's botChat at web.oswave.io; `?bot=name.theta` to point at another bot)
+- anything unknown redirects to `/`
 - `/genesis/`: Wave Genesis, an AI inside a Theta contract that dreams a bot from a .theta name, wallet or word
 - `/genesis/embed/`: the same page, used as the X player
 - `/genesis/x/`: the page you share on X (player card tags)

@@ -1,0 +1,87 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,interactive-widget=resizes-content">
+<title>Chat with Wavey</title><meta name="description" content="Chat with Wavey, the Wave OS assistant on Theta.">
+<link rel="icon" href="/wavey-orb.png">
+<style>
+*{box-sizing:border-box}html,body{margin:0;height:100%;background:#000;color:#e8f1ef;font:15px/1.45 system-ui,-apple-system,Segoe UI,Roboto,sans-serif}
+.app{display:flex;flex-direction:column;height:100%;max-width:720px;margin:0 auto;border-left:1px solid #111;border-right:1px solid #111}
+header{display:flex;align-items:center;justify-content:space-between;padding:8px 10px;border-bottom:1px solid #161d1b;background:#050707}
+.ib{background:none;border:0;color:#8fa29e;cursor:pointer;padding:6px;border-radius:6px;display:inline-flex;text-decoration:none}.ib:hover{color:#18d8ba;background:#0d1412}.ib svg{width:18px;height:18px}
+.pill{background:#18d8ba;color:#04201b;font-weight:700;font-size:13px;border-radius:5px;padding:3px 14px}
+main{flex:1;overflow-y:auto;position:relative;padding:16px 14px 8px}
+.mascot{position:sticky;top:0;float:right;margin:0 0 8px 12px;width:72px;height:72px;image-rendering:pixelated;z-index:2}
+.msg{max-width:82%;margin:8px 0;padding:9px 12px;border-radius:12px;white-space:pre-wrap;word-wrap:break-word;font-size:14.5px;clear:none}
+.me{margin-left:auto;background:#18d8ba;color:#04201b;border-bottom-right-radius:4px;width:fit-content}
+.bot{background:#0e1513;border:1px solid #1a2421;border-bottom-left-radius:4px;width:fit-content}
+.bot.fail{color:#ff9a9a}
+.note{color:#8fa29e;font-size:13px;margin:4px 0 10px;max-width:80%}.note a{color:#18d8ba}
+.dots span{display:inline-block;width:6px;height:6px;margin:0 2px;border-radius:50%;background:#18d8ba;animation:b 1s infinite}.dots span:nth-child(2){animation-delay:.15s}.dots span:nth-child(3){animation-delay:.3s}
+@keyframes b{0%,80%,100%{opacity:.25}40%{opacity:1}}
+.status{font-size:11px;color:#5f716d;padding:0 14px 4px;display:flex;justify-content:space-between}
+form{margin:0 10px 10px;border:1px solid #1d2826;border-radius:12px;background:#070a09;padding:8px}
+textarea{width:100%;background:none;border:0;color:#e8f1ef;font:inherit;resize:none;outline:none;min-height:40px;max-height:140px}
+.row{display:flex;justify-content:flex-end;gap:6px;align-items:center}
+.send{background:#18d8ba;color:#04201b;border:0;border-radius:8px;padding:6px 10px;cursor:pointer;display:inline-flex}.send:disabled{opacity:.4;cursor:default}.send svg{width:18px;height:18px}
+.on{color:#18d8ba!important}
+</style></head><body><div class="app">
+<header>
+ <a class="ib" href="/" title="All Wave bots" aria-label="Back"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 18l-6-6 6-6"/></svg></a>
+ <span class="pill">Wavey</span>
+ <button class="ib" id="new" title="New chat" aria-label="New chat"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg></button>
+</header>
+<main id="log"><canvas class="mascot" id="m" width="20" height="20" aria-label="Wavey"></canvas></main>
+<div class="status"><span id="st">Connecting to Wavey...</span><span id="ql"></span></div>
+<form id="f"><textarea id="t" placeholder="Type a message..." rows="1" aria-label="Message"></textarea>
+ <div class="row">
+  <button type="button" class="ib" id="mic" title="Speak" aria-label="Speak" hidden><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5 11a7 7 0 0014 0M12 18v3"/></svg></button>
+  <button type="button" class="ib" id="spk" title="Read replies aloud" aria-label="Read replies aloud"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 5L6 9H3v6h3l5 4z"/><path d="M15.5 8.5a5 5 0 010 7M18.5 5.5a9 9 0 010 13"/></svg></button>
+  <button class="send" id="go" aria-label="Send"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M5 12h14M13 6l6 6-6 6"/></svg></button>
+ </div></form>
+</div><script>
+const D={"palette":["#3b82f6","#00e5c0","#ffffff","#0a0a0a"],"pixels":"AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABAQEBAgEBAQECAQEBAQAAAAAAAQEBAQECAQICAQIBAQEBAQAAAAEBAwMDAQICAgICAgEDAwMBAQAAAQEBAQEBAQEBAQEBAQEBAQEBAAABAQEBAQEBAQEBAQEBAQEBAQEAAAECAwMEBAMCAgICAwQEAwMCAQAAAQIDAwQEAwICAgIDBAQDAwIBAAABAgICAgICAgICAgICAgICAgEAAAECAgICAgICAgICAgICAgICAQAAAQICAgICAgICAgICAgICAgIBAAABAgICAgICAgICAgICAgICAgEAAAECAgICAgICAgICAgICAgICAQAAAQICAgMDAwMDAwMDAwMCAgIBAAABAgICAgICAgICAgICAgICAgEAAAECAgICAgICAgICAgICAgICAQAAAQEBAgICAgICAgICAgICAgEBAAAAAAEBAgICAQEBAQICAgEBAAAAAAAAAAABAQEBAQEBAQEBAAAAAAAAAAAAAAABAQEBAQEBAQAAAAAAAA==","eyes":[123,124,125,126,127,147,146,145,144,143,132,152,153,154,155,156,136,135,134,133],"eyelid":"#00e5c0","mouth":[265,266,267,268,269,270,271,272,273,274],"talkColor":"#00e5c0","thinking":{"pixels":"AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABAQEBAgEBAQECAQEBAQAAAAAAAQEBAQECAQICAQIBAQEBAQAAAAEBAQEBAQICAgICAgEBAQEBAQAAAQEBAQEBAQEBAQEBAQEBAQEBAAABAQEBAQEBAQEBAQEBAQEBAQEAAAECAgICAgICAgICAgICAgICAQAAAQICAgICAgICAgICAgICAgIBAAABAgICAgICAgICAgICAgICAgEAAAECAgICAgICAgICAgICAgICAQAAAQICAgICAgICAgICAgICAgIBAAABAgICAgICAgICAgICAgICAgEAAAEDAwMDAwMDAwMDAwMDAwMDAQAAAQMDAwMDAwMDAwMDAwMDAwMBAAABAwMDAwMDAwMDAwMDAwMDAwEAAAEDAwMDAwMDAwMDAwMDAwMDAQAAAQEBAwMDAwMDAwMDAwMDAQEBAAAAAAEBAwMDAwMDAwMDAwEBAAAAAAAAAAABAQMDAwMDAwEBAAAAAAAAAAAAAAABAQEBAQEBAQAAAAAAAA=="}};
+const API="https://web.oswave.io/functions/botChat";
+const BOT=(new URLSearchParams(location.search).get('bot')||'wave.theta').trim().toLowerCase();
+const $=id=>document.getElementById(id);
+const b64=s=>Uint8Array.from(atob(s),c=>c.charCodeAt(0));
+const BASE=b64(D.pixels),THINK=b64(D.thinking.pixels),EYES=new Set(D.eyes),MOUTH=new Set(D.mouth);
+const cv=$('m'),cx=cv.getContext('2d');let mode='idle',blink=false,mouthOn=false;
+function draw(){const px=mode==='thinking'?THINK:BASE;cx.clearRect(0,0,20,20);
+ for(let i=0;i<400;i++){const v=px[i];if(!v)continue;let c=D.palette[v-1];
+  if(mode!=='thinking'){if(blink&&EYES.has(i))c=D.eyelid;if(mouthOn&&MOUTH.has(i))c=D.talkColor}
+  cx.fillStyle=c;cx.fillRect(i%20,Math.floor(i/20),1,1)}}
+setInterval(()=>{if(mode==='idle'||mode==='talking'){blink=true;draw();setTimeout(()=>{blink=false;draw()},140)}},3800);
+let talkT=null;function talk(on){clearInterval(talkT);mouthOn=false;if(on){mode='talking';talkT=setInterval(()=>{mouthOn=!mouthOn;draw()},130)}else{mode='idle'}draw()}
+function think(on){mode=on?'thinking':'idle';draw()}
+draw();
+function browserId(){const k='wave-bot-browser-id';let v=localStorage.getItem(k);if(!v){v=crypto.randomUUID();localStorage.setItem(k,v)}return v}
+async function api(action,extra){const r=await fetch(API,{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify({action,name:BOT,browserId:browserId(),...extra})});
+ let j={};try{j=await r.json()}catch(e){j={error:'Wavey is unreachable right now.'}}return j}
+const KEY='wavey-chat:'+BOT;let msgs=JSON.parse(sessionStorage.getItem(KEY)||'[]');let live=false,busy=false,speak=localStorage.getItem('wavey-speak')==='1';
+const log=$('log');
+function add(role,text,cls){const d=document.createElement('div');d.className='msg '+(role==='user'?'me':'bot')+(cls?' '+cls:'');d.textContent=text;log.appendChild(d);log.scrollTop=log.scrollHeight;return d}
+function note(html){const d=document.createElement('div');d.className='note';d.innerHTML=html;log.appendChild(d);log.scrollTop=log.scrollHeight}
+function quota(j){if(j.owner)$('ql').textContent='You own this bot';else if(j.freeLeft!=null)$('ql').textContent=j.freeLeft+' free question'+(j.freeLeft===1?'':'s')+' left today';}
+function paywall(){note('Your free questions for today are used up. Keep chatting with your Wave Wallet on <a href="https://web.oswave.io/tns/'+encodeURIComponent(BOT)+'" target="_blank" rel="noopener">Wave Web</a>, or come back tomorrow.')}
+function render(){[...log.querySelectorAll('.msg,.note')].forEach(e=>e.remove());if(!msgs.length)add('assistant',"Hi, I'm Wavey! Ask me anything about Wave OS, BrainVault, Wave Wallet or Theta.");msgs.forEach(m=>add(m.role,m.content))}
+async function init(){render();const j=await api('info',{});
+ if(j.error&&!j.mode&&!j.bot){$('st').textContent='Wavey is offline';
+  note(/no wave\.bot record|invalid name/i.test(j.error)?"Wavey opens to the public once his cards are minted on Theta. Check back soon.":j.error.replace(/</g,'&lt;'));lock(true);return}
+ live=true;$('st').textContent=(j.bot||'Wavey')+' · '+BOT;quota(j);lock(false);if(j.needsPayment||j.freeOut)paywall()}
+function lock(v){$('t').disabled=v;$('go').disabled=v;$('t').placeholder=v?'Wavey is not available yet':'Type a message...'}
+function sayAloud(text){if(!speak||!('speechSynthesis' in window))return false;const u=new SpeechSynthesisUtterance(text);u.onstart=()=>talk(true);u.onend=()=>talk(false);u.onerror=()=>talk(false);speechSynthesis.cancel();speechSynthesis.speak(u);return true}
+async function typeOut(el,text){talk(true);const step=Math.max(2,Math.ceil(text.length/120));for(let i=0;i<=text.length;i+=step){el.textContent=text.slice(0,i);log.scrollTop=log.scrollHeight;await new Promise(r=>setTimeout(r,16))}el.textContent=text;if(!speak)talk(false)}
+$('f').onsubmit=async e=>{e.preventDefault();const text=$('t').value.trim();if(!text||busy||!live)return;busy=true;$('go').disabled=true;$('t').value='';fit();
+ msgs.push({role:'user',content:text});add('user',text);const wait=add('assistant','');wait.innerHTML='<span class="dots"><span></span><span></span><span></span></span>';think(true);
+ let j;try{j=await api('chat',{messages:msgs.slice(-20)})}catch(err){j={error:'Network error. Try again.'}}
+ think(false);
+ if(j.reply){msgs.push({role:'assistant',content:j.reply});sessionStorage.setItem(KEY,JSON.stringify(msgs));sayAloud(j.reply);await typeOut(wait,j.reply)}
+ else{msgs.pop();wait.className='msg bot fail';wait.textContent=j.error||'Wavey could not answer that.';}
+ quota(j);if(j.needsPayment||j.freeOut||(j.payment&&j.freeLeft===0&&!j.credits))paywall();busy=false;$('go').disabled=false;$('t').focus()};
+const ta=$('t');function fit(){ta.style.height='auto';ta.style.height=Math.min(140,ta.scrollHeight)+'px'}ta.oninput=fit;
+ta.onkeydown=e=>{if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();$('f').requestSubmit()}};
+$('new').onclick=()=>{msgs=[];sessionStorage.removeItem(KEY);render()};
+const spk=$('spk');spk.classList.toggle('on',speak);spk.onclick=()=>{speak=!speak;localStorage.setItem('wavey-speak',speak?'1':'0');spk.classList.toggle('on',speak);if(!speak&&'speechSynthesis' in window){speechSynthesis.cancel();talk(false)}};
+const SR=window.SpeechRecognition||window.webkitSpeechRecognition;if(SR){const mic=$('mic');mic.hidden=false;let rec=null;
+ mic.onclick=()=>{if(rec){rec.stop();return}rec=new SR();rec.lang=navigator.language||'en-US';rec.interimResults=true;mic.classList.add('on');
+  rec.onresult=ev=>{ta.value=[...ev.results].map(r=>r[0].transcript).join('');fit()};rec.onend=()=>{mic.classList.remove('on');rec=null};rec.start()}}
+init();
+</script></body></html>
