@@ -8,7 +8,7 @@ header{display:flex;align-items:center;justify-content:space-between;padding:8px
 .ib{background:none;border:0;color:#8fa29e;cursor:pointer;padding:6px;border-radius:6px;display:inline-flex;text-decoration:none}.ib:hover{color:#18d8ba;background:#0d1412}.ib svg{width:18px;height:18px}
 .pill{background:#18d8ba;color:#04201b;font-weight:700;font-size:13px;border-radius:5px;padding:3px 14px}
 main{flex:1;overflow-y:auto;position:relative;padding:16px 14px 8px}
-.mascot{position:sticky;top:0;float:right;margin:0 0 8px 12px;width:72px;height:72px;image-rendering:pixelated;z-index:2}
+.mwrap{position:sticky;top:0;float:right;margin:0 0 8px 12px;width:72px;height:72px;z-index:2}.mascot{display:block;width:72px;height:72px;image-rendering:pixelated}.mwrap.thinking .mascot{animation:bob .9s ease-in-out infinite}@keyframes bob{0%,100%{transform:translateY(0) rotate(0)}25%{transform:translateY(-3px) rotate(-3deg)}75%{transform:translateY(-3px) rotate(3deg)}}.thought{position:absolute;top:-6px;left:-30px;display:none;padding:4px 7px;border-radius:12px;background:#0d1513;border:1px solid #1f3a35}.thought:after{content:"";position:absolute;right:-5px;bottom:-4px;width:7px;height:7px;border-radius:50%;background:#0d1513;border:1px solid #1f3a35}.mwrap.thinking .thought{display:block}.thought span{display:inline-block;width:5px;height:5px;margin:0 1.5px;border-radius:50%;background:#18d8ba;animation:b 1s infinite}.thought span:nth-child(2){animation-delay:.15s}.thought span:nth-child(3){animation-delay:.3s}@media (prefers-reduced-motion:reduce){.mwrap.thinking .mascot{animation:none}}
 .msg{max-width:82%;margin:8px 0;padding:9px 12px;border-radius:12px;white-space:pre-wrap;word-wrap:break-word;font-size:14.5px;clear:none}
 .me{margin-left:auto;background:#18d8ba;color:#04201b;border-bottom-right-radius:4px;width:fit-content}
 .bot{background:#0e1513;border:1px solid #1a2421;border-bottom-left-radius:4px;width:fit-content}
@@ -28,7 +28,7 @@ textarea{width:100%;background:none;border:0;color:#e8f1ef;font:inherit;resize:n
  <span class="pill">Wavey</span>
  <button class="ib" id="new" title="New chat" aria-label="New chat"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg></button>
 </header>
-<main id="log"><canvas class="mascot" id="m" width="20" height="20" aria-label="Wavey"></canvas></main>
+<main id="log"><div class="mwrap" id="mw"><span class="thought" aria-hidden="true"><span></span><span></span><span></span></span><canvas class="mascot" id="m" width="20" height="20" aria-label="Wavey"></canvas></div></main>
 <div class="status"><span id="st">Connecting to Wavey...</span><span id="ql"></span></div>
 <form id="f"><textarea id="t" placeholder="Type a message..." rows="1" aria-label="Message"></textarea>
  <div class="row">
@@ -50,7 +50,7 @@ function draw(){const px=mode==='thinking'?THINK:BASE;cx.clearRect(0,0,20,20);
   cx.fillStyle=c;cx.fillRect(i%20,Math.floor(i/20),1,1)}}
 setInterval(()=>{if(mode==='idle'||mode==='talking'){blink=true;draw();setTimeout(()=>{blink=false;draw()},140)}},3800);
 let talkT=null;function talk(on){clearInterval(talkT);mouthOn=false;if(on){mode='talking';talkT=setInterval(()=>{mouthOn=!mouthOn;draw()},130)}else{mode='idle'}draw()}
-function think(on){mode=on?'thinking':'idle';draw()}
+let thinkT0=0;function think(on){mode=on?'thinking':'idle';$('mw').classList.toggle('thinking',on);if(on)thinkT0=Date.now();draw()}
 draw();
 function browserId(){const k='wave-bot-browser-id';let v=localStorage.getItem(k);if(!v){v=crypto.randomUUID();localStorage.setItem(k,v)}return v}
 async function api(action,extra){const r=await fetch(API,{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify({action,name:BOT,browserId:browserId(),...extra})});
@@ -72,6 +72,7 @@ async function typeOut(el,text){talk(true);const step=Math.max(2,Math.ceil(text.
 $('f').onsubmit=async e=>{e.preventDefault();const text=$('t').value.trim();if(!text||busy||!live)return;busy=true;$('go').disabled=true;$('t').value='';fit();
  msgs.push({role:'user',content:text});add('user',text);const wait=add('assistant','');wait.innerHTML='<span class="dots"><span></span><span></span><span></span></span>';think(true);
  let j;try{j=await api('chat',{messages:msgs.slice(-20)})}catch(err){j={error:'Network error. Try again.'}}
+ {const left=900-(Date.now()-thinkT0);if(left>0)await new Promise(r=>setTimeout(r,left))}
  think(false);
  if(j.reply){msgs.push({role:'assistant',content:j.reply});sessionStorage.setItem(KEY,JSON.stringify(msgs));sayAloud(j.reply);await typeOut(wait,j.reply)}
  else{msgs.pop();wait.className='msg bot fail';wait.textContent=j.error||'Wavey could not answer that.';}
