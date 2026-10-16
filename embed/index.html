@@ -1,0 +1,43 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Wave bots</title><meta name="robots" content="noindex">
+<style>
+*{box-sizing:border-box}html,body{margin:0;height:100%;background:#000;color:#e8f1ef;font:14px/1.45 system-ui,-apple-system,Segoe UI,Roboto,sans-serif;overflow:hidden}
+.app{display:flex;flex-direction:column;height:100%}
+nav{display:flex;gap:4px;align-items:center;padding:6px 8px;border-bottom:1px solid #161d1b;background:#050707;flex:0 0 auto}
+nav button{background:none;border:0;color:#8fa29e;font:600 13px system-ui,sans-serif;padding:6px 12px;border-radius:7px;cursor:pointer}
+nav button.on{background:#18d8ba;color:#04201b}nav button:not(.on):hover{color:#18d8ba;background:#0d1412}
+nav a{margin-left:auto;color:#8fa29e;font-size:12px;text-decoration:none;padding:6px 8px}nav a:hover{color:#18d8ba}
+.view{flex:1;min-height:0;position:relative}.view>*{position:absolute;inset:0;width:100%;height:100%;border:0;display:none}.view>.on{display:block}
+#home{overflow:auto;padding:14px}
+.brand{color:#8fa29e;font-size:12px;letter-spacing:.04em;text-transform:uppercase;margin-bottom:10px}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}@media(max-width:460px){.grid{grid-template-columns:1fr}}
+.card{border:1px solid #1a2421;background:#070b0a;border-radius:12px;padding:14px;display:flex;flex-direction:column;gap:8px}
+.card h2{margin:0;font-size:18px}.card h2 b{color:#18d8ba}.card p{margin:0;color:#b9c7c4;font-size:13px;flex:1}
+.hd{display:flex;align-items:center;justify-content:space-between;gap:8px}.orb{width:44px;height:44px;image-rendering:pixelated}
+.tag{font-size:11px;color:#18d8ba;border:1px solid #1f3a35;border-radius:999px;padding:2px 8px;white-space:nowrap}
+.btn{align-self:flex-start;background:#18d8ba;color:#04201b;border:0;border-radius:9px;padding:8px 14px;font:700 13px system-ui,sans-serif;cursor:pointer}
+.poc{margin-top:10px;color:#6f817d;font-size:12px}
+</style></head><body><div class="app">
+<nav><button data-v="home" class="on">Home</button><button data-v="wavey">Wavey</button><button data-v="genesis">Genesis</button><a href="https://bots.oswave.io" target="_blank" rel="noopener">Open site &#8599;</a></nav>
+<div class="view">
+<div id="home" class="on">
+ <div class="brand">Wave bots on Theta</div>
+ <div class="grid">
+  <section class="card"><div class="hd"><h2>Wavey</h2><img class="orb" src="/wavey-orb.png" alt=""></div>
+   <p>Wave's guide bot. His mascot, listing and knowledge are cards on the Theta blockchain. 5 free questions a day.</p>
+   <button class="btn" data-go="wavey">Chat with Wavey</button></section>
+  <section class="card"><div class="hd"><h2>Wave <b>Genesis</b></h2><span class="tag">AI on chain</span></div>
+   <p>An AI inside a Theta smart contract dreams a unique bot from any .theta name, wallet or word. Free, no wallet.</p>
+   <button class="btn" data-go="genesis">Dream my bot</button></section>
+ </div>
+ <p class="poc">Proof of concept by Wave OS. Soon anyone can mint their own bot on Wave Web.</p>
+</div>
+<iframe id="wavey" title="Chat with Wavey" data-src="/wavey/?embed=1" allow="microphone; autoplay"></iframe>
+<iframe id="genesis" title="Wave Genesis" data-src="/genesis/embed/"></iframe>
+</div></div>
+<script>
+function show(v){document.querySelectorAll('nav button').forEach(b=>b.classList.toggle('on',b.dataset.v===v));
+ document.querySelectorAll('.view>*').forEach(e=>{const on=e.id===v;e.classList.toggle('on',on);if(on&&e.dataset.src&&!e.src)e.src=e.dataset.src})}
+document.querySelectorAll('[data-v],[data-go]').forEach(b=>b.onclick=()=>show(b.dataset.v||b.dataset.go));
+const t=new URLSearchParams(location.search).get('tab');if(t==='wavey'||t==='genesis')show(t);
+</script></body></html>
