@@ -85,14 +85,14 @@ if (!self.crossOriginIsolated && 'serviceWorker' in navigator && !sessionStorage
 import { pipeline, TextStreamer, env } from 'https://cdn.jsdelivr.net/npm/@huggingface/transformers@4.3.1';
 env.allowLocalModels = false;
 
-// Download sizes measured from the Hugging Face repos (MB). gpu = q4f16 for WebGPU, cpu = q4 for WASM.
+// Download sizes measured from the Hugging Face repos (MB). gpu = q4f16 for WebGPU, cpu = q8 for WASM (int8 runs ~3x faster than q4 on phone CPUs and is smaller).
 const MODELS = [
   { id:'onnx-community/gemma-3-270m-it-ONNX', name:'Gemma 3 270M', gpu:273, cpu:null, gpuOnly:true, note:'Smallest. GPU only (its format does not load on the CPU path).' },
   { id:'onnx-community/LFM2-350M-ONNX', name:'LFM2 350M (Liquid)', gpu:255, cpu:null, gpuOnly:true, note:'Built for on-device use. Small and quick.' },
-  { id:'HuggingFaceTB/SmolLM2-360M-Instruct', name:'SmolLM2 360M', gpu:273, cpu:388, note:'Popular tiny baseline.' },
-  { id:'onnx-community/Qwen3-0.6B-ONNX', name:'Qwen3 0.6B', gpu:570, cpu:919, note:'Best candidate for tool calls at this size. Thinking turned off.', qwen3:true },
+  { id:'HuggingFaceTB/SmolLM2-360M-Instruct', name:'SmolLM2 360M', gpu:273, cpu:365, note:'Popular tiny baseline.' },
+  { id:'onnx-community/Qwen3-0.6B-ONNX', name:'Qwen3 0.6B', gpu:570, cpu:618, note:'Best candidate for tool calls at this size. Thinking turned off.', qwen3:true },
   { id:'onnx-community/gemma-3-1b-it-ONNX', name:'Gemma 3 1B', gpu:763, cpu:null, gpuOnly:true, note:'Stronger answers, needs a recent phone.' },
-  { id:'onnx-community/Llama-3.2-1B-Instruct-ONNX', name:'Llama 3.2 1B', gpu:1090, cpu:1693, note:'Large download. GPU recommended.' },
+  { id:'onnx-community/Llama-3.2-1B-Instruct-ONNX', name:'Llama 3.2 1B', gpu:1090, cpu:1237, note:'Large download. GPU recommended.' },
   { id:'onnx-community/Qwen3-1.7B-ONNX', name:'Qwen3 1.7B', gpu:1426, cpu:null, note:'High-end phones and laptops only. GPU only.', qwen3:true, gpuOnly:true },
 ];
 
@@ -162,7 +162,7 @@ $('run').onclick = async () => {
   if (engine === 'webgpu' && !device.webgpu) { setBar(0, 'This browser has no WebGPU. Pick WASM (CPU).'); return; }
   if (engine === 'wasm' && m.gpuOnly) { setBar(0, `${m.name} needs WebGPU. On CPU, pick SmolLM2 360M or Qwen3 0.6B.`); return; }
   const fmt = $('fmt').value;
-  const dtypes = fmt !== 'auto' ? [fmt] : engine === 'webgpu' ? [device.shaderF16 === false ? 'q4' : 'q4f16'] : ['q4','q8'];
+  const dtypes = fmt !== 'auto' ? [fmt] : engine === 'webgpu' ? [device.shaderF16 === false ? 'q4' : 'q4f16'] : ['q8','q4'];
   const resumed = JSON.parse(sessionStorage.getItem('benchResumeTried') || '[]'); sessionStorage.removeItem('benchResumeTried');
   const tried = [...resumed];
   let dtype = dtypes[0];
@@ -225,7 +225,7 @@ $('run').onclick = async () => {
     });
     const tStart = performance.now();
     try {
-      await gen(chatPrompt(gen, m, p.text), { ...genOpts, max_new_tokens:96, do_sample:false, repetition_penalty:1.1, streamer });
+      await gen(chatPrompt(gen, m, p.text), { ...genOpts, max_new_tokens:160, do_sample:false, repetition_penalty:1.1, streamer });
     } catch (err) { out.textContent = 'Error: ' + (err?.message||err); }
     const clean = text.replace(/<think>[\s\S]*?<\/think>/g,'').trim();
     const ttft = n ? Math.round(tFirst - tStart) : null;
