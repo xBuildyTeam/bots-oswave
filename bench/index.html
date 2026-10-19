@@ -59,6 +59,8 @@ if (!self.crossOriginIsolated && 'serviceWorker' in navigator && !sessionStorage
       <div style="flex:2;min-width:220px"><label>Model</label><select id="model"></select></div>
       <div style="flex:1;min-width:140px"><label>Engine</label>
         <select id="engine"><option value="auto">Auto (GPU if available)</option><option value="webgpu">WebGPU (GPU)</option><option value="wasm">WASM (CPU)</option></select></div>
+      <div><label for="fmt">Format</label>
+        <select id="fmt"><option value="auto">Auto (checks output)</option><option value="q4f16">q4f16 (half precision, fastest)</option><option value="q4">q4 (full precision math)</option><option value="q8">q8 (CPU)</option></select></div>
     </div>
     <p class="muted" id="modelNote" style="margin:8px 0 0"></p>
     <div class="row" style="margin-top:12px">
@@ -113,7 +115,7 @@ sel.onchange = showNote; showNote();
 const device = { ua:navigator.userAgent, cores:navigator.hardwareConcurrency||null, memoryGB:navigator.deviceMemory||null, webgpu:false, gpu:null, isolated:self.crossOriginIsolated };
 async function detect() {
   if (navigator.gpu) {
-    try { const a = await navigator.gpu.requestAdapter(); if (a) { device.webgpu = true; const info = a.info || (a.requestAdapterInfo ? await a.requestAdapterInfo() : {}); device.gpu = [info.vendor, info.architecture, info.description].filter(Boolean).join(' ') || 'available'; } } catch {}
+    try { const a = await navigator.gpu.requestAdapter(); if (a) { device.webgpu = true; const info = a.info || (a.requestAdapterInfo ? await a.requestAdapterInfo() : {}); device.gpu = [info.vendor, info.architecture, info.description].filter(Boolean).join(' ') || 'available'; device.shaderF16 = a.features.has('shader-f16'); } } catch {}
   }
   const tiles = [
     ['WebGPU', device.webgpu ? '<span class="ok">Yes</span>' : '<span class="bad">No</span>', device.gpu || 'CPU only'],
@@ -151,7 +153,9 @@ $('run').onclick = async () => {
   if (engine === 'auto') engine = device.webgpu ? 'webgpu' : 'wasm';
   if (engine === 'webgpu' && !device.webgpu) { setBar(0, 'This browser has no WebGPU. Pick WASM (CPU).'); return; }
   if (engine === 'wasm' && m.gpuOnly) { setBar(0, `${m.name} needs WebGPU. On CPU, pick SmolLM2 360M or Qwen3 0.6B.`); return; }
-  const dtypes = engine === 'webgpu' ? ['q4f16','q4'] : ['q4','q8'];
+  const fmt = $('fmt').value;
+  const dtypes = fmt !== 'auto' ? [fmt] : engine === 'webgpu' ? (device.shaderF16 === false ? ['q4'] : ['q4f16','q4']) : ['q4','q8'];
+  const tried = [];
   let dtype = dtypes[0];
   $('run').disabled = true; renderPrompts(); $('summary').hidden = true;
 
@@ -165,17 +169,26 @@ $('run').onclick = async () => {
       try {
         dtype = d;
         gen = await pipeline('text-generation', m.id, {
-      device: engine, dtype,
-      progress_callback: e => {
-        if (e.status === 'progress' && e.total) {
-          fromNetwork = true; files[e.file] = { loaded:e.loaded, total:e.total };
-          const L = Object.values(files).reduce((a,f)=>a+f.loaded,0), T = Object.values(files).reduce((a,f)=>a+f.total,0);
-          setBar(5 + 75*L/T, `Downloading ${(L/1e6).toFixed(0)} / ${(T/1e6).toFixed(0)} MB`);
-        } else if (e.status === 'ready') setBar(82, 'Starting the model...');
-      },
-    });
-        break;
-      } catch (e2) { lastErr = e2; gen = null; setBar(3, `That format did not load here, trying another (${d} failed)...`); }
+          device: engine, dtype,
+          progress_callback: e => {
+            if (e.status === 'progress' && e.total) {
+              fromNetwork = true; files[d + e.file] = { loaded:e.loaded, total:e.total };
+              const L = Object.values(files).reduce((a,f)=>a+f.loaded,0), T = Object.values(files).reduce((a,f)=>a+f.total,0);
+              setBar(5 + 75*L/T, `Downloading ${(L/1e6).toFixed(0)} / ${(T/1e6).toFixed(0)} MB (${d})`);
+            } else if (e.status === 'ready') setBar(82, 'Starting the model...');
+          },
+        });
+      } catch (e2) { lastErr = e2; gen = null; tried.push({ dtype:d, result:'load failed: ' + String(e2?.message||e2).slice(0,120) }); setBar(3, `${d} did not load here, trying another format...`); continue; }
+      // Warm-up + sanity check (not counted). Some phone GPUs return garbage in half precision.
+      setBar(85, `Checking ${d} output (not counted)...`);
+      let check = '';
+      try { const o = await gen([{ role:'user', content:'What is 2+2? Answer with the number only.' + (m.qwen3?' /no_think':'') }], { max_new_tokens:8, do_sample:false }); check = String(o[0].generated_text.at(-1).content).replace(/<think>[\s\S]*?(<\/think>|$)/g,'').trim(); } catch (e3) { check = 'error: ' + (e3?.message||e3); }
+      const sane = /\b4\b|four/i.test(check);
+      tried.push({ dtype:d, sanity_output:check.slice(0,60), sane });
+      if (sane || d === dtypes.at(-1)) break;
+      setBar(4, `${d} gave garbled output on this GPU ("${check.slice(0,20)}"). Retrying with ${dtypes[dtypes.indexOf(d)+1]}...`);
+      try { await gen.dispose(); } catch {}
+      gen = null;
     }
     if (!gen) throw lastErr;
   } catch (err) {
@@ -184,10 +197,6 @@ $('run').onclick = async () => {
   }
   const loadMs = Math.round(performance.now() - t0);
   const downloadedMB = Math.round(Object.values(files).reduce((a,f)=>a+f.total,0)/1e6);
-
-  // Warm-up (not counted): first GPU run compiles shaders
-  setBar(85, 'Warming up (not counted)...');
-  try { await gen([{ role:'user', content:'Hi' + (m.qwen3?' /no_think':'') }], { max_new_tokens:4, do_sample:false }); } catch {}
 
   const results = [];
   for (let i = 0; i < PROMPTS.length; i++) {
@@ -215,7 +224,7 @@ $('run').onclick = async () => {
   const ok = results.filter(r => r.decode_tps);
   const avg = k => ok.length ? +(ok.reduce((a,r)=>a+r[k],0)/ok.length).toFixed(1) : null;
   const run = {
-    at: new Date().toISOString(), model:m.name, repo:m.id, engine, dtype,
+    at: new Date().toISOString(), bench:2, model:m.name, repo:m.id, engine, dtype, formats_tried: tried, sane: tried.at(-1)?.sane ?? null,
     load_ms: loadMs, cached: !fromNetwork, downloaded_mb: downloadedMB,
     avg_ttft_ms: Math.round(avg('ttft_ms')), avg_decode_tps: avg('decode_tps'),
     correct: results.filter(r=>r.pass===true).length + ' of ' + results.filter(r=>r.pass!==null).length,
