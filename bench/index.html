@@ -147,6 +147,14 @@ $('copy').onclick = async () => {
 
 const setBar = (p, msg) => { $('bar').style.width = Math.max(0,Math.min(100,p))+'%'; if (msg) $('status').textContent = msg; };
 
+// Build the chat prompt ourselves so Qwen3 thinking is really off (the /no_think tag was ignored on phones).
+function chatPrompt(gen, m, text) {
+  let p = gen.tokenizer.apply_chat_template([{ role:'user', content:text }], { tokenize:false, add_generation_prompt:true, enable_thinking:false });
+  if (m.qwen3 && !p.includes('</think>')) p += '<think>\n\n</think>\n\n';
+  return p;
+}
+const genOpts = { add_special_tokens:false, return_full_text:false };
+
 $('run').onclick = async () => {
   const m = MODELS[sel.value];
   let engine = $('engine').value;
@@ -154,7 +162,7 @@ $('run').onclick = async () => {
   if (engine === 'webgpu' && !device.webgpu) { setBar(0, 'This browser has no WebGPU. Pick WASM (CPU).'); return; }
   if (engine === 'wasm' && m.gpuOnly) { setBar(0, `${m.name} needs WebGPU. On CPU, pick SmolLM2 360M or Qwen3 0.6B.`); return; }
   const fmt = $('fmt').value;
-  const dtypes = fmt !== 'auto' ? [fmt] : engine === 'webgpu' ? (device.shaderF16 === false ? ['q4'] : ['q4f16','q4']) : ['q4','q8'];
+  const dtypes = fmt !== 'auto' ? [fmt] : engine === 'webgpu' ? [device.shaderF16 === false ? 'q4' : 'q4f16'] : ['q4','q8'];
   const resumed = JSON.parse(sessionStorage.getItem('benchResumeTried') || '[]'); sessionStorage.removeItem('benchResumeTried');
   const tried = [...resumed];
   let dtype = dtypes[0];
@@ -183,15 +191,15 @@ $('run').onclick = async () => {
       // Warm-up + sanity check (not counted). Some phone GPUs return garbage in half precision.
       setBar(85, `Checking ${d} output (not counted)...`);
       let check = '';
-      try { const o = await gen([{ role:'user', content:'What is 2+2? Answer with the number only.' + (m.qwen3?' /no_think':'') }], { max_new_tokens:8, do_sample:false }); check = String(o[0].generated_text.at(-1).content).replace(/<think>[\s\S]*?(<\/think>|$)/g,'').trim(); } catch (e3) { check = 'error: ' + (e3?.message||e3); }
+      try { const o = await gen(chatPrompt(gen, m, 'What is 2+2? Answer with the number only.'), { ...genOpts, max_new_tokens:16, do_sample:false }); check = String(o[0].generated_text).replace(/<think>[\s\S]*?(<\/think>|$)/g,'').trim(); } catch (e3) { check = 'error: ' + (e3?.message||e3); }
       const sane = /\b4\b|four/i.test(check);
-      tried.push({ dtype:d, sanity_output:check.slice(0,60), sane });
-      if (sane || d === dtypes.at(-1)) break;
-      // Garbled: reload the page for a clean memory heap (phones run out of memory loading a second copy), then retry the next format.
-      const next = dtypes[dtypes.indexOf(d)+1];
-      setBar(4, `${d} gave garbled output on this GPU ("${check.slice(0,20)}"). Reloading to try ${next}...`);
-      sessionStorage.setItem('benchResume', JSON.stringify({ model: sel.value, engine, fmt: next }));
-      sessionStorage.setItem('benchResumeTried', JSON.stringify(tried));
+      tried.push({ engine, dtype:d, sanity_output:check.slice(0,60), sane });
+      // Only GPU half precision (q4f16) produces garbage; CPU math is full precision, so never switch formats on WASM.
+      if (sane || engine === 'wasm' || fmt !== 'auto') break;
+      // Garbled on this GPU: reload (frees memory, phones crash loading a second copy) and run on CPU instead.
+      setBar(4, `${d} on this GPU gave garbled output ("${check.slice(0,20)}"). Reloading to run on CPU (WASM)...`);
+      sessionStorage.setItem('benchResume', JSON.stringify({ model: sel.value, engine: 'wasm', fmt: 'auto' }));
+      sessionStorage.setItem('benchResumeTried', JSON.stringify(tried.map(t => ({ ...t, engine }))));
       await new Promise(r => setTimeout(r, 1500)); location.reload(); return;
     }
     if (!gen) throw lastErr;
@@ -217,7 +225,7 @@ $('run').onclick = async () => {
     });
     const tStart = performance.now();
     try {
-      await gen([{ role:'user', content:p.text + (m.qwen3?' /no_think':'') }], { max_new_tokens:96, do_sample:false, repetition_penalty:1.1, streamer });
+      await gen(chatPrompt(gen, m, p.text), { ...genOpts, max_new_tokens:96, do_sample:false, repetition_penalty:1.1, streamer });
     } catch (err) { out.textContent = 'Error: ' + (err?.message||err); }
     const clean = text.replace(/<think>[\s\S]*?<\/think>/g,'').trim();
     const ttft = n ? Math.round(tFirst - tStart) : null;
