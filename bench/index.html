@@ -134,7 +134,7 @@ renderPrompts();
 
 const history = JSON.parse(localStorage.getItem('waveLiteBench') || '[]');
 function renderHistory() {
-  $('hist').innerHTML = history.slice().reverse().map(r => `<tr><td>${r.model}</td><td>${r.engine}</td><td>${(r.load_ms/1000).toFixed(1)}s</td><td>${r.avg_ttft_ms} ms</td><td><b>${r.avg_decode_tps}</b> tok/s</td></tr>`).join('') || '<tr><td colspan="5" class="muted">No runs yet</td></tr>';
+  $('hist').innerHTML = history.slice().reverse().map(r => r.error ? `<tr><td>${r.model}</td><td>${r.engine} ${r.dtype}</td><td colspan="3" class="bad">failed to load</td></tr>` : `<tr><td>${r.model}</td><td>${r.engine}</td><td>${(r.load_ms/1000).toFixed(1)}s</td><td>${r.avg_ttft_ms} ms</td><td><b>${r.avg_decode_tps}</b> tok/s</td></tr>`).join('') || '<tr><td colspan="5" class="muted">No runs yet</td></tr>';
   $('copy').disabled = history.length === 0;
 }
 renderHistory();
@@ -155,7 +155,8 @@ $('run').onclick = async () => {
   if (engine === 'wasm' && m.gpuOnly) { setBar(0, `${m.name} needs WebGPU. On CPU, pick SmolLM2 360M or Qwen3 0.6B.`); return; }
   const fmt = $('fmt').value;
   const dtypes = fmt !== 'auto' ? [fmt] : engine === 'webgpu' ? (device.shaderF16 === false ? ['q4'] : ['q4f16','q4']) : ['q4','q8'];
-  const tried = [];
+  const resumed = JSON.parse(sessionStorage.getItem('benchResumeTried') || '[]'); sessionStorage.removeItem('benchResumeTried');
+  const tried = [...resumed];
   let dtype = dtypes[0];
   $('run').disabled = true; renderPrompts(); $('summary').hidden = true;
 
@@ -178,7 +179,7 @@ $('run').onclick = async () => {
             } else if (e.status === 'ready') setBar(82, 'Starting the model...');
           },
         });
-      } catch (e2) { lastErr = e2; gen = null; tried.push({ dtype:d, result:'load failed: ' + String(e2?.message||e2).slice(0,120) }); setBar(3, `${d} did not load here, trying another format...`); continue; }
+      } catch (e2) { lastErr = e2; gen = null; tried.push({ dtype:d, sane:null, result:'load failed: ' + String(e2?.message||e2).slice(0,120) }); setBar(3, `${d} did not load here, trying another format...`); continue; }
       // Warm-up + sanity check (not counted). Some phone GPUs return garbage in half precision.
       setBar(85, `Checking ${d} output (not counted)...`);
       let check = '';
@@ -186,13 +187,18 @@ $('run').onclick = async () => {
       const sane = /\b4\b|four/i.test(check);
       tried.push({ dtype:d, sanity_output:check.slice(0,60), sane });
       if (sane || d === dtypes.at(-1)) break;
-      setBar(4, `${d} gave garbled output on this GPU ("${check.slice(0,20)}"). Retrying with ${dtypes[dtypes.indexOf(d)+1]}...`);
-      try { await gen.dispose(); } catch {}
-      gen = null;
+      // Garbled: reload the page for a clean memory heap (phones run out of memory loading a second copy), then retry the next format.
+      const next = dtypes[dtypes.indexOf(d)+1];
+      setBar(4, `${d} gave garbled output on this GPU ("${check.slice(0,20)}"). Reloading to try ${next}...`);
+      sessionStorage.setItem('benchResume', JSON.stringify({ model: sel.value, engine, fmt: next }));
+      sessionStorage.setItem('benchResumeTried', JSON.stringify(tried));
+      await new Promise(r => setTimeout(r, 1500)); location.reload(); return;
     }
     if (!gen) throw lastErr;
   } catch (err) {
-    setBar(0, 'Could not load this model here: ' + (err?.message || err) + '. Try a smaller model or the other engine.');
+    const oom = /bad_alloc|out of memory|Array buffer allocation/i.test(String(err?.message||err));
+    setBar(0, `Could not load ${m.name} as ${dtype} on ${engine}: ` + (err?.message || err) + (oom ? '. The phone ran out of memory for this format. Try q4f16, a smaller model, or close other tabs.' : '. Try a smaller model or the other engine.'));
+    if (tried.length) { history.push({ at:new Date().toISOString(), bench:2, model:m.name, repo:m.id, engine, dtype, formats_tried:tried, error:String(err?.message||err).slice(0,200), load_ms:0, avg_ttft_ms:null, avg_decode_tps:null, correct:'load failed', results:[] }); localStorage.setItem('waveLiteBench', JSON.stringify(history)); renderHistory(); }
     $('run').disabled = false; return;
   }
   const loadMs = Math.round(performance.now() - t0);
@@ -242,6 +248,9 @@ $('run').onclick = async () => {
   $('run').disabled = false;
   try { await gen.dispose?.(); } catch {}
 };
+
+const resume = JSON.parse(sessionStorage.getItem('benchResume') || 'null');
+if (resume) { sessionStorage.removeItem('benchResume'); sel.value = resume.model; showNote(); $('engine').value = resume.engine; $('fmt').value = resume.fmt; setTimeout(() => $('run').click(), 800); }
 </script>
 </body>
 </html>
