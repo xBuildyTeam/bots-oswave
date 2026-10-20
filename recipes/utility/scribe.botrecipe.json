@@ -1,0 +1,89 @@
+{
+ "schema": "wave.botrecipe/1",
+ "name": "Scribe",
+ "slug": "scribe",
+ "pitch": "Writes the email, summary or post from the plan",
+ "category": "productivity",
+ "tags": [
+  "bot:utility",
+  "utility:scribe",
+  "wave:task",
+  "productivity"
+ ],
+ "name_to_point": "scribe.bots.theta",
+ "design": {
+  "schema": "wave.avatar/1",
+  "kind": "pixel20",
+  "palette": [
+   "#22d3ee",
+   "#e8fbff",
+   "#071a1f",
+   "#0e7490",
+   "#ffffff"
+  ],
+  "pixels": "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAMDAwMDAwMDAwMDAwMDAAAAAAADAQEBAQEBAQEBAQEBAQEDAAAAAwECAgICAgICAgICAgICAgEDAAADAQICAgICAgICAgICAgICAQMAAAMBAgICAwUCAgICAwUCAgIBAwAAAwECAgIDAwICAgIDAwICAgEDAAADAQICAgICAgICAgICAgICAQMAAAMBAgICAgIDAwMDAgICAgIBAwAAAwECAgICAgICAgIEBAICAgEDAAADAQICAgMDAwMCBAQCAgICAQMAAAMBAgICBQUFBQIEAgICAgIBAwAAAwECAgIDAwMDAgQCAgICAgEDAAADAQICAgUFBQIEAgICAgICAQMAAAMBAgICAwMCBAICAgICAgIBAwAAAAMBAQEBAQEBAQEBAQEBAQMAAAAAAAMDAwMDAwMDAwMDAwMDAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+  "eyes": [
+   126,
+   127,
+   146,
+   147,
+   132,
+   133,
+   152,
+   153
+  ],
+  "mouth": [
+   188,
+   189,
+   190,
+   191
+  ],
+  "eyelid": "#22d3ee",
+  "talkColor": "#0e7490",
+  "thinking": {
+   "pixels": "AAAAAAAAAAAAAAAAAAAEAAQABAAAAAAAAAAAAAAAAAAAAAAEAAAAAAAAAAMDAwMDAwMDAwMDAwMDAAAAAAADAQEBAQEBAQEBAQEBAQEDAAAAAwECAgICAgICAgICAgICAgEDAAADAQICAgICAgICAgICAgICAQMAAAMBAgICAgICAgICAgICAgIBAwAAAwECAgIDAwICAgIDAwICAgEDAAADAQICAgICAgICAgICAgICAQMAAAMBAgICAgIDAwMDAgICAgIBAwAAAwECAgICAgICAgIEBAICAgEDAAADAQICAgMDAwMCBAQCAgICAQMAAAMBAgICBQUFBQIEAgICAgIBAwAAAwECAgIDAwMDAgQCAgICAgEDAAADAQICAgUFBQIEAgICAgICAQMAAAMBAgICAwMCBAICAgICAgIBAwAAAAMBAQEBAQEBAQEBAQEBAQMAAAAAAAMDAwMDAwMDAwMDAwMDAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=="
+  }
+ },
+ "rules": {
+  "schema": "wave.rules/1",
+  "mode": "paid",
+  "feeTfuel": 0.12,
+  "aiCostTfuel": 0.15,
+  "waveFeePct": 2,
+  "minAnswerTfuel": 0.27,
+  "freePerUserPerDay": 5,
+  "maxPerUserPerDay": 50,
+  "dailyFreeCapTfuel": 20,
+  "payout": "bots.theta",
+  "currency": "TFUEL",
+  "hours": {
+   "tz": "America/Los_Angeles",
+   "days": [
+    "mon",
+    "tue",
+    "wed",
+    "thu",
+    "fri",
+    "sat",
+    "sun"
+   ],
+   "start": "00:00",
+   "end": "23:59",
+   "alwaysOpen": true
+  },
+  "awayMessage": "Scribe is between drafts. Back shortly.",
+  "actions": []
+ },
+ "knowledge": [
+  {
+   "title": "Scribe: how I work",
+   "text": "{\"schema\": \"wave.botskill/1\", \"bot\": \"scribe.bots.theta\", \"job\": \"Write a finished piece (email, summary, post, brief) from earlier steps, in the tone asked for. Adds no facts of its own.\", \"reads\": \"wave.task/1 (or plain text for step 1)\", \"returns\": \"wave.draft/1\", \"output_shape\": {\"kind\": \"wave.draft/1\", \"format\": \"email | summary | post | brief\", \"tone\": \"\", \"subject\": \"\", \"body\": \"\", \"claims\": [{\"text\": \"exact phrase in the body\", \"from\": \"step:field path, e.g. 2:steps.s3.end, or v3:N\"}]}, \"rules\": [\"Every date, number, name and promise in the body is listed in claims with where it came from.\", \"Facts not in earlier steps or cited cards are left out, not invented.\", \"Respects length limits (e.g. 280 characters for a post).\", \"Never sends anything: it returns the draft.\"], \"next\": \"checker.bots.theta\", \"engine\": \"Qwen3.8-Flash\", \"price_tfuel\": 0.2754}"
+  },
+  {
+   "title": "wave.task/1: how Wave utility bots chain",
+   "text": "{\"schema\": \"wave.spec/1\", \"name\": \"wave.task/1\", \"what\": \"One JSON envelope every Wave utility bot reads and returns, so any bot's answer is the next bot's input.\", \"envelope\": {\"schema\": \"wave.task/1\", \"task_id\": \"t_<random>\", \"goal\": \"the whole job in one sentence\", \"step\": \"1-based step number\", \"bot\": \"bot that produced this step\", \"next\": \"suggested next bot or null\", \"status\": \"ok | needs_input | failed\", \"questions\": [\"asked only when status is needs_input\"], \"input\": \"this step's input (text or a previous output)\", \"output\": \"{kind, ...} one of wave.items/1, wave.plan/1, wave.tally/1, wave.draft/1, wave.check/1\", \"history\": [{\"step\": 1, \"bot\": \"clerk.bots.theta\", \"kind\": \"wave.items/1\", \"sha256\": \"of that output\"}], \"refs\": [\"v3:N cards used\"], \"cost\": {\"step_tfuel\": 0.2754, \"total_tfuel\": \"sum of all steps so far\", \"quote_tfuel\": \"price of the planned chain, given before step 1\"}}, \"rules\": [\"Bots never drop fields they don't understand; they pass them on.\", \"Every fact a bot adds names where it came from: a step and field, or a v3:N card.\", \"Dates are ISO 8601 with a timezone. Money and counts are numbers, never words.\", \"A bot that can't do its part returns status needs_input with questions, never a guess.\", \"Utility bots take no outside actions: they read and return JSON only (actions list is empty).\"], \"chain\": \"clerk -> planner -> tally -> scribe -> checker. Any sub-chain works: e.g. scribe -> checker.\"}"
+  }
+ ],
+ "engine": "llm",
+ "_rulesHash": "sha256:a33292bad752ec0e661c12a285d1f9748ba3fb04bbb82f72b9ee473c9e8b49a5"
+}

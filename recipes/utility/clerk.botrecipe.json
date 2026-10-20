@@ -1,0 +1,89 @@
+{
+ "schema": "wave.botrecipe/1",
+ "name": "Clerk",
+ "slug": "clerk",
+ "pitch": "Turns messy notes into tasks, dates and decisions",
+ "category": "productivity",
+ "tags": [
+  "bot:utility",
+  "utility:clerk",
+  "wave:task",
+  "productivity"
+ ],
+ "name_to_point": "clerk.bots.theta",
+ "design": {
+  "schema": "wave.avatar/1",
+  "kind": "pixel20",
+  "palette": [
+   "#f59e0b",
+   "#fff7e6",
+   "#1a1208",
+   "#b45309",
+   "#ffffff"
+  ],
+  "pixels": "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAMDAwMDAwMDAwMDAwMDAAAAAAADAQEBAQEBAQEBAQEBAQEDAAAAAwECAgICAgICAgICAgICAgEDAAADAQICAgICAgICAgICAgICAQMAAAMBAgICAwUCAgICAwUCAgIBAwAAAwECAgIDAwICAgIDAwICAgEDAAADAQICAgICAgICAgICAgICAQMAAAMBAgICAgIDAwMDAgICAgIBAwAAAwECAgICAgQEBAQCAgICAgEDAAADAQICAgQCBQUFBQIEAgICAQMAAAMBAgICBAIDAwMDAgQCAgIBAwAAAwECAgIEAgUFBQUCBAICAgEDAAADAQICAgQCAwMDAwIEAgICAQMAAAMBAgICBAQEBAQEBAQCAgIBAwAAAAMBAQEBAQEBAQEBAQEBAQMAAAAAAAMDAwMDAwMDAwMDAwMDAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+  "eyes": [
+   126,
+   127,
+   146,
+   147,
+   132,
+   133,
+   152,
+   153
+  ],
+  "mouth": [
+   188,
+   189,
+   190,
+   191
+  ],
+  "eyelid": "#f59e0b",
+  "talkColor": "#b45309",
+  "thinking": {
+   "pixels": "AAAAAAAAAAAAAAAAAAAEAAQABAAAAAAAAAAAAAAAAAAAAAAEAAAAAAAAAAMDAwMDAwMDAwMDAwMDAAAAAAADAQEBAQEBAQEBAQEBAQEDAAAAAwECAgICAgICAgICAgICAgEDAAADAQICAgICAgICAgICAgICAQMAAAMBAgICAgICAgICAgICAgIBAwAAAwECAgIDAwICAgIDAwICAgEDAAADAQICAgICAgICAgICAgICAQMAAAMBAgICAgIDAwMDAgICAgIBAwAAAwECAgICAgQEBAQCAgICAgEDAAADAQICAgQCBQUFBQIEAgICAQMAAAMBAgICBAIDAwMDAgQCAgIBAwAAAwECAgIEAgUFBQUCBAICAgEDAAADAQICAgQCAwMDAwIEAgICAQMAAAMBAgICBAQEBAQEBAQCAgIBAwAAAAMBAQEBAQEBAQEBAQEBAQMAAAAAAAMDAwMDAwMDAwMDAwMDAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=="
+  }
+ },
+ "rules": {
+  "schema": "wave.rules/1",
+  "mode": "paid",
+  "feeTfuel": 0.12,
+  "aiCostTfuel": 0.15,
+  "waveFeePct": 2,
+  "minAnswerTfuel": 0.27,
+  "freePerUserPerDay": 5,
+  "maxPerUserPerDay": 50,
+  "dailyFreeCapTfuel": 20,
+  "payout": "bots.theta",
+  "currency": "TFUEL",
+  "hours": {
+   "tz": "America/Los_Angeles",
+   "days": [
+    "mon",
+    "tue",
+    "wed",
+    "thu",
+    "fri",
+    "sat",
+    "sun"
+   ],
+   "start": "00:00",
+   "end": "23:59",
+   "alwaysOpen": true
+  },
+  "awayMessage": "Clerk is resting. Leave your notes and try again soon.",
+  "actions": []
+ },
+ "knowledge": [
+  {
+   "title": "Clerk: how I work",
+   "text": "{\"schema\": \"wave.botskill/1\", \"bot\": \"clerk.bots.theta\", \"job\": \"Read pasted notes, emails, chat or a transcript and pull out what matters. Extract only what the text says.\", \"reads\": \"wave.task/1 (or plain text for step 1)\", \"returns\": \"wave.items/1\", \"output_shape\": {\"kind\": \"wave.items/1\", \"tasks\": [{\"id\": \"k1\", \"text\": \"\", \"owner\": \"name or null\", \"due\": \"ISO date or null\", \"quote\": \"exact words it came from\"}], \"people\": [{\"name\": \"\", \"role\": \"or null\"}], \"dates\": [{\"what\": \"\", \"when\": \"ISO\"}], \"decisions\": [\"\"], \"open_questions\": [\"\"]}, \"rules\": [\"Every task carries the exact quote it came from.\", \"Relative dates (next Friday) are resolved with the date helpers against the input's date and timezone; if neither is known, ask.\", \"No invented owners or deadlines: use null.\", \"Return at most 50 tasks; say so if there were more.\"], \"next\": \"planner.bots.theta\", \"engine\": \"lite-ai (Qwen3 1.7B + harness), Qwen3.8-Flash fallback\", \"price_tfuel\": 0.2754}"
+  },
+  {
+   "title": "wave.task/1: how Wave utility bots chain",
+   "text": "{\"schema\": \"wave.spec/1\", \"name\": \"wave.task/1\", \"what\": \"One JSON envelope every Wave utility bot reads and returns, so any bot's answer is the next bot's input.\", \"envelope\": {\"schema\": \"wave.task/1\", \"task_id\": \"t_<random>\", \"goal\": \"the whole job in one sentence\", \"step\": \"1-based step number\", \"bot\": \"bot that produced this step\", \"next\": \"suggested next bot or null\", \"status\": \"ok | needs_input | failed\", \"questions\": [\"asked only when status is needs_input\"], \"input\": \"this step's input (text or a previous output)\", \"output\": \"{kind, ...} one of wave.items/1, wave.plan/1, wave.tally/1, wave.draft/1, wave.check/1\", \"history\": [{\"step\": 1, \"bot\": \"clerk.bots.theta\", \"kind\": \"wave.items/1\", \"sha256\": \"of that output\"}], \"refs\": [\"v3:N cards used\"], \"cost\": {\"step_tfuel\": 0.2754, \"total_tfuel\": \"sum of all steps so far\", \"quote_tfuel\": \"price of the planned chain, given before step 1\"}}, \"rules\": [\"Bots never drop fields they don't understand; they pass them on.\", \"Every fact a bot adds names where it came from: a step and field, or a v3:N card.\", \"Dates are ISO 8601 with a timezone. Money and counts are numbers, never words.\", \"A bot that can't do its part returns status needs_input with questions, never a guess.\", \"Utility bots take no outside actions: they read and return JSON only (actions list is empty).\"], \"chain\": \"clerk -> planner -> tally -> scribe -> checker. Any sub-chain works: e.g. scribe -> checker.\"}"
+  }
+ ],
+ "engine": "llm",
+ "_rulesHash": "sha256:14ed7df5556ebac27e7519a780c98730008f4fe417f69e2b86535d61ef79e84e"
+}

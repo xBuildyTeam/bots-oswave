@@ -1,0 +1,47 @@
+{
+ "schema": "wave.botpack/1",
+ "name": "Wave Utility Bots",
+ "version": "0.1.0",
+ "chain": [
+  "clerk",
+  "planner",
+  "tally",
+  "scribe",
+  "checker"
+ ],
+ "envelope": "wave.task/1",
+ "spec": "https://bots.oswave.io/recipes/utility/wave-utility-bots-spec.md",
+ "recipes": [
+  {
+   "slug": "clerk",
+   "url": "https://bots.oswave.io/recipes/utility/clerk.botrecipe.json",
+   "sha256": "56fffdc8c07c6ef15a6396ab0d3503e46b7a43e4224dcc74a9117c8810243238",
+   "bytes": 5182
+  },
+  {
+   "slug": "planner",
+   "url": "https://bots.oswave.io/recipes/utility/planner.botrecipe.json",
+   "sha256": "4a3de296eb9e83f142d91698b025f4125b89f1119a8b97ba6253da945cf8647a",
+   "bytes": 5308
+  },
+  {
+   "slug": "tally",
+   "url": "https://bots.oswave.io/recipes/utility/tally.botrecipe.json",
+   "sha256": "466f76c1fef17b2998b943c8c57081b812bd604bf4525405487625b9e1c455db",
+   "bytes": 5183
+  },
+  {
+   "slug": "scribe",
+   "url": "https://bots.oswave.io/recipes/utility/scribe.botrecipe.json",
+   "sha256": "87d1299634d232a20b66b09d8ec10ebf1daaae5af085d4c4b5f2a8baa7ee4105",
+   "bytes": 5048
+  },
+  {
+   "slug": "checker",
+   "url": "https://bots.oswave.io/recipes/utility/checker.botrecipe.json",
+   "sha256": "73de3647da4d8403aee17fe56ef3d2052791ee7c7c39641360cd35704b55d807",
+   "bytes": 5137
+  }
+ ],
+ "noindex": true
+}

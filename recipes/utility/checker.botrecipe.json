@@ -1,0 +1,89 @@
+{
+ "schema": "wave.botrecipe/1",
+ "name": "Checker",
+ "slug": "checker",
+ "pitch": "Checks a draft against its sources before it goes out",
+ "category": "productivity",
+ "tags": [
+  "bot:utility",
+  "utility:checker",
+  "wave:task",
+  "productivity"
+ ],
+ "name_to_point": "checker.bots.theta",
+ "design": {
+  "schema": "wave.avatar/1",
+  "kind": "pixel20",
+  "palette": [
+   "#14b8a6",
+   "#e6fbf8",
+   "#06161a",
+   "#0f766e",
+   "#ffffff"
+  ],
+  "pixels": "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAMDAwMDAwMDAwMDAwMDAAAAAAADAQEBAQEBAQEBAQEBAQEDAAAAAwECAgICAgICAgICAgICAgEDAAADAQICAgICAgICAgICAgICAQMAAAMBAgICAwUCAgICAwUCAgIBAwAAAwECAgIDAwICAgIDAwICAgEDAAADAQICAgICAgICAgICAgICAQMAAAMBAgICAgIDAwMDAgICAgIBAwAAAwECAgIEBAQEBAQEBQICAgEDAAADAQICAgQEBAQEBAUFAgICAQMAAAMBAgICBQQEBAQFBQQCAgIBAwAAAwECAgIFBQQEBQUEBAICAgEDAAADAQICAgQFBQUFBAQEAgICAQMAAAMBAgICBAQFBQQEBAQCAgIBAwAAAAMBAQEBAQEBAQEBAQEBAQMAAAAAAAMDAwMDAwMDAwMDAwMDAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+  "eyes": [
+   126,
+   127,
+   146,
+   147,
+   132,
+   133,
+   152,
+   153
+  ],
+  "mouth": [
+   188,
+   189,
+   190,
+   191
+  ],
+  "eyelid": "#14b8a6",
+  "talkColor": "#0f766e",
+  "thinking": {
+   "pixels": "AAAAAAAAAAAAAAAAAAAEAAQABAAAAAAAAAAAAAAAAAAAAAAEAAAAAAAAAAMDAwMDAwMDAwMDAwMDAAAAAAADAQEBAQEBAQEBAQEBAQEDAAAAAwECAgICAgICAgICAgICAgEDAAADAQICAgICAgICAgICAgICAQMAAAMBAgICAgICAgICAgICAgIBAwAAAwECAgIDAwICAgIDAwICAgEDAAADAQICAgICAgICAgICAgICAQMAAAMBAgICAgIDAwMDAgICAgIBAwAAAwECAgIEBAQEBAQEBQICAgEDAAADAQICAgQEBAQEBAUFAgICAQMAAAMBAgICBQQEBAQFBQQCAgIBAwAAAwECAgIFBQQEBQUEBAICAgEDAAADAQICAgQFBQUFBAQEAgICAQMAAAMBAgICBAQFBQQEBAQCAgIBAwAAAAMBAQEBAQEBAQEBAQEBAQMAAAAAAAMDAwMDAwMDAwMDAwMDAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=="
+  }
+ },
+ "rules": {
+  "schema": "wave.rules/1",
+  "mode": "paid",
+  "feeTfuel": 0.12,
+  "aiCostTfuel": 0.15,
+  "waveFeePct": 2,
+  "minAnswerTfuel": 0.27,
+  "freePerUserPerDay": 5,
+  "maxPerUserPerDay": 50,
+  "dailyFreeCapTfuel": 20,
+  "payout": "bots.theta",
+  "currency": "TFUEL",
+  "hours": {
+   "tz": "America/Los_Angeles",
+   "days": [
+    "mon",
+    "tue",
+    "wed",
+    "thu",
+    "fri",
+    "sat",
+    "sun"
+   ],
+   "start": "00:00",
+   "end": "23:59",
+   "alwaysOpen": true
+  },
+  "awayMessage": "Checker is away. Hold the send button until it's back.",
+  "actions": []
+ },
+ "knowledge": [
+  {
+   "title": "Checker: how I work",
+   "text": "{\"schema\": \"wave.botskill/1\", \"bot\": \"checker.bots.theta\", \"job\": \"Verify every claim in a draft against the earlier steps and any cited BrainVault cards, then give a pass or fail.\", \"reads\": \"wave.task/1 (or plain text for step 1)\", \"returns\": \"wave.check/1\", \"output_shape\": {\"kind\": \"wave.check/1\", \"verdict\": \"pass | fail\", \"results\": [{\"claim\": \"\", \"status\": \"supported | contradicted | unsupported\", \"evidence\": \"step:field or v3:N\", \"note\": \"\"}], \"fixes\": [{\"claim\": \"\", \"should_be\": \"\"}]}, \"rules\": [\"Dates, numbers and names are compared in code, exactly; the model only judges wording.\", \"A claim with no source is unsupported, and any unsupported or contradicted claim fails the draft.\", \"Cards are hash-checked (waveApi check) before they count as evidence.\", \"It never rewrites the draft; it lists fixes for Scribe.\"], \"next\": null, \"engine\": \"code checks first, Qwen3.8-Flash for wording\", \"price_tfuel\": 0.2754}"
+  },
+  {
+   "title": "wave.task/1: how Wave utility bots chain",
+   "text": "{\"schema\": \"wave.spec/1\", \"name\": \"wave.task/1\", \"what\": \"One JSON envelope every Wave utility bot reads and returns, so any bot's answer is the next bot's input.\", \"envelope\": {\"schema\": \"wave.task/1\", \"task_id\": \"t_<random>\", \"goal\": \"the whole job in one sentence\", \"step\": \"1-based step number\", \"bot\": \"bot that produced this step\", \"next\": \"suggested next bot or null\", \"status\": \"ok | needs_input | failed\", \"questions\": [\"asked only when status is needs_input\"], \"input\": \"this step's input (text or a previous output)\", \"output\": \"{kind, ...} one of wave.items/1, wave.plan/1, wave.tally/1, wave.draft/1, wave.check/1\", \"history\": [{\"step\": 1, \"bot\": \"clerk.bots.theta\", \"kind\": \"wave.items/1\", \"sha256\": \"of that output\"}], \"refs\": [\"v3:N cards used\"], \"cost\": {\"step_tfuel\": 0.2754, \"total_tfuel\": \"sum of all steps so far\", \"quote_tfuel\": \"price of the planned chain, given before step 1\"}}, \"rules\": [\"Bots never drop fields they don't understand; they pass them on.\", \"Every fact a bot adds names where it came from: a step and field, or a v3:N card.\", \"Dates are ISO 8601 with a timezone. Money and counts are numbers, never words.\", \"A bot that can't do its part returns status needs_input with questions, never a guess.\", \"Utility bots take no outside actions: they read and return JSON only (actions list is empty).\"], \"chain\": \"clerk -> planner -> tally -> scribe -> checker. Any sub-chain works: e.g. scribe -> checker.\"}"
+  }
+ ],
+ "engine": "llm",
+ "_rulesHash": "sha256:593ca2455640e5def998e28ade47a9073e9fb8a143f9b9bd95534c1072e508ce"
+}
