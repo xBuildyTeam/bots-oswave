@@ -24,7 +24,7 @@ label{color:#9ca3af;font-size:14px}
 const RPC="https://eth-rpc-api.thetatoken.org/rpc",CHAIN="0x169";
 const REG="0xffc49362fb293bc063fda33e537be608b357e787",RES="0x428101cb7a0d22587a6f098a518c36af2a1b2e31";
 const SIGNER="0x4e96028447b653e43ff359aaff9f79c0479386db";
-const BOTS=[["clerk","v3:78"],["planner","v3:87"],["tally","v3:91"],["scribe","v3:100"],["checker","v3:105"]];
+const BOTS=[["clerk","v3:113"],["planner","v3:114"],["tally","v3:116"],["scribe","v3:117"],["checker","v3:119"]];
 const enc=new TextEncoder(),hex=b=>[...b].map(x=>x.toString(16).padStart(2,"0")).join("");
 const unhex=h=>Uint8Array.from(h.match(/../g)||[],x=>parseInt(x,16));
 const kh=s=>hex(keccak256(enc.encode(s)));
