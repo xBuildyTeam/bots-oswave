@@ -15,13 +15,13 @@
   "schema": "wave.avatar/1",
   "kind": "pixel20",
   "palette": [
+   "#140c24",
    "#8b5cf6",
    "#f3eeff",
-   "#140c24",
-   "#6d28d9",
-   "#ffffff"
+   "#ffffff",
+   "#6d28d9"
   ],
-  "pixels": "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAMDAwMDAwMDAwMDAwMDAAAAAAADAQEBAQEBAQEBAQEBAQEDAAAAAwECAgICAgICAgICAgICAgEDAAADAQICAgICAgICAgICAgICAQMAAAMBAgICAwUCAgICAwUCAgIBAwAAAwECAgIDAwICAgIDAwICAgEDAAADAQICAgICAgICAgICAgICAQMAAAMBAgICAgIDAwMDAgICAgIBAwAAAwECAgIEBAQEBAQEBAICAgEDAAADAQICAgQFAwUDBQMEAgICAQMAAAMBAgICBAUFBQUFBQQCAgIBAwAAAwECAgIEBQMFAwUDBAICAgEDAAADAQICAgQFBQUFBQUEAgICAQMAAAMBAgICBAQEBAQEBAQCAgIBAwAAAAMBAQEBAQEBAQEBAQEBAQMAAAAAAAMDAwMDAwMDAwMDAwMDAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+  "pixels": "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAEBAQEBAQEBAQEBAQEBAAAAAAABAgICAgICAgICAgICAgIBAAAAAQIDAwMDAwMDAwMDAwMDAwIBAAABAgMDAwMDAwMDAwMDAwMDAgEAAAECAwMDAQQDAwMDAQQDAwMCAQAAAQIDAwMBAQMDAwMBAQMDAwIBAAABAgMDAwMDAwMDAwMDAwMDAgEAAAECAwMDAwMBAQEBAwMDAwMCAQAAAQIDAwMFBQUFBQUFBQMDAwIBAAABAgMDAwUEAQQBBAEFAwMDAgEAAAECAwMDBQQEBAQEBAUDAwMCAQAAAQIDAwMFBAEEAQQBBQMDAwIBAAABAgMDAwUEBAQEBAQFAwMDAgEAAAECAwMDBQUFBQUFBQUDAwMCAQAAAAECAgICAgICAgICAgICAgEAAAAAAAEBAQEBAQEBAQEBAQEBAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
   "eyes": [
    126,
    127,
@@ -32,40 +32,72 @@
    152,
    153
   ],
+  "eyelid": "#8b5cf6",
   "mouth": [
    188,
    189,
    190,
    191
   ],
-  "eyelid": "#8b5cf6",
   "talkColor": "#6d28d9",
   "thinking": {
-   "pixels": "AAAAAAAAAAAAAAAAAAAEAAQABAAAAAAAAAAAAAAAAAAAAAAEAAAAAAAAAAMDAwMDAwMDAwMDAwMDAAAAAAADAQEBAQEBAQEBAQEBAQEDAAAAAwECAgICAgICAgICAgICAgEDAAADAQICAgICAgICAgICAgICAQMAAAMBAgICAgICAgICAgICAgIBAwAAAwECAgIDAwICAgIDAwICAgEDAAADAQICAgICAgICAgICAgICAQMAAAMBAgICAgIDAwMDAgICAgIBAwAAAwECAgIEBAQEBAQEBAICAgEDAAADAQICAgQFAwUDBQMEAgICAQMAAAMBAgICBAUFBQUFBQQCAgIBAwAAAwECAgIEBQMFAwUDBAICAgEDAAADAQICAgQFBQUFBQUEAgICAQMAAAMBAgICBAQEBAQEBAQCAgIBAwAAAAMBAQEBAQEBAQEBAQEBAQMAAAAAAAMDAwMDAwMDAwMDAwMDAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=="
+   "pixels": "AAAAAAAAAAAAAAAAAAAFAAUABQAAAAAAAAAAAAAAAAAAAAAFAAAAAAAAAAEBAQEBAQEBAQEBAQEBAAAAAAABAgICAgICAgICAgICAgIBAAAAAQIDAwMDAwMDAwMDAwMDAwIBAAABAgMDAwMDAwMDAwMDAwMDAgEAAAECAwMDAwMDAwMDAwMDAwMCAQAAAQIDAwMBAQMDAwMBAQMDAwIBAAABAgMDAwMDAwMDAwMDAwMDAgEAAAECAwMDAwMBAQEBAwMDAwMCAQAAAQIDAwMFBQUFBQUFBQMDAwIBAAABAgMDAwUEAQQBBAEFAwMDAgEAAAECAwMDBQQEBAQEBAUDAwMCAQAAAQIDAwMFBAEEAQQBBQMDAwIBAAABAgMDAwUEBAQEBAQFAwMDAgEAAAECAwMDBQUFBQUFBQUDAwMCAQAAAAECAgICAgICAgICAgICAgEAAAAAAAEBAQEBAQEBAQEBAQEBAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+   "eyes": [
+    126,
+    127,
+    146,
+    147,
+    132,
+    133,
+    152,
+    153
+   ],
+   "mouth": [
+    188,
+    189,
+    190,
+    191
+   ],
+   "fx": []
+  },
+  "sleeping": {
+   "fx": []
+  },
+  "profileColor": "#8b5cf6",
+  "motion": [
+   "idle"
+  ],
+  "source": {
+   "flow": "Wave Bots official design",
+   "run": "bot-6ad7b97f99046e0644ac19c4",
+   "generated": true
   }
  },
  "rules": {
   "schema": "wave.rules/1",
   "mode": "public",
+  "currency": "TFUEL",
+  "waveFeePct": 2,
   "freePerUserPerDay": 5,
   "maxPerUserPerDay": 50,
-  "publicChatEnabled": true,
+  "allow": [],
   "hours": {
    "tz": "America/Los_Angeles",
    "days": [
-    "mon",
-    "tue",
-    "wed",
-    "thu",
-    "fri",
-    "sat",
-    "sun"
+    0,
+    1,
+    2,
+    3,
+    4,
+    5,
+    6
    ],
    "start": "00:00",
    "end": "23:59",
    "alwaysOpen": true
   },
   "awayMessage": "Planner is offline for a moment. Your plan will keep.",
+  "publicChatEnabled": true,
   "actions": [],
   "cascade": {
    "role": "scheduler",
@@ -88,5 +120,10 @@
    "text": "{\"schema\":\"wave.spec/1\",\"name\":\"wave.task/1\",\"rev\":2,\"what\":\"One JSON envelope every Wave bot reads and returns, so any bot's answer is the next bot's input. v2 adds the Mission, role briefs, assumptions, unverified claims and routed checks. Fields from v1 are unchanged.\",\"envelope\":{\"schema\":\"wave.task/1\",\"task_id\":\"t_<random>\",\"goal\":\"the whole job in one sentence\",\"step\":\"1-based\",\"bot\":\"bot that produced this step\",\"next\":\"suggested next bot or null\",\"status\":\"ok | needs_input | failed\",\"questions\":[\"only when status is needs_input\"],\"input\":\"this step's input\",\"output\":\"{kind,...}\",\"mission\":{\"result\":\"\",\"definition_of_done\":[\"checkable statements\"],\"constraints\":[\"\"]},\"role_brief\":{\"role\":\"\",\"receives\":\"\",\"must_return\":[\"fields\"],\"definition_of_done\":[\"\"],\"may_not\":[\"\"],\"tools\":[]},\"assumptions\":[\"what this bot had to guess\"],\"unverified\":[\"claims it could not check against a step or card\"],\"history\":[{\"step\":1,\"bot\":\"\",\"kind\":\"\",\"sha256\":\"of that output\"}],\"refs\":[\"v3:N cards used\"],\"cost\":{\"step\":\"\",\"total\":\"\"}},\"kinds\":[\"wave.items/1\",\"wave.plan/1\",\"wave.tally/1\",\"wave.draft/1\",\"wave.check/1\",\"wave.risks/1\",\"wave.critique/1\",\"wave.facts/1\",\"wave.proposal/1\"],\"rules\":[\"Never drop fields you don't understand; pass them on.\",\"Every fact names its source: a step and field, or a v3:N card.\",\"Dates are ISO 8601 with a timezone. Money and counts are numbers.\",\"Can't do your part: return needs_input with questions, never a guess.\",\"Anything you guessed goes in assumptions; anything you couldn't check goes in unverified.\",\"A role_brief can only narrow what you do; your own rules card always wins.\",\"Bots read and return JSON only. No outside actions.\"]}"
   }
  ],
- "_rulesHash": "sha256:a2c5a08313ee661323dc1176ccbb84ddcd2152ed6c9bc5668b957a30e9b2e05f"
+ "_rulesHash": "sha256:f002c54d87c686fd868244620726027ca865357cc46f601c910ce6060f6a25d9",
+ "_reuses": {
+  "design": "v3:86",
+  "supersedes_rules": "v3:128",
+  "supersedes_listing": "v3:129"
+ }
 }

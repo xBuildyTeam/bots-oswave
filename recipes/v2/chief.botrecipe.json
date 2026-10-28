@@ -53,13 +53,13 @@
   "hours": {
    "tz": "America/Los_Angeles",
    "days": [
-    "mon",
-    "tue",
-    "wed",
-    "thu",
-    "fri",
-    "sat",
-    "sun"
+    0,
+    1,
+    2,
+    3,
+    4,
+    5,
+    6
    ],
    "start": "00:00",
    "end": "23:59",
@@ -86,5 +86,5 @@
    "text": "{\"schema\":\"wave.spec/1\",\"name\":\"wave.task/1\",\"rev\":2,\"what\":\"One JSON envelope every Wave bot reads and returns, so any bot's answer is the next bot's input. v2 adds the Mission, role briefs, assumptions, unverified claims and routed checks. Fields from v1 are unchanged.\",\"envelope\":{\"schema\":\"wave.task/1\",\"task_id\":\"t_<random>\",\"goal\":\"the whole job in one sentence\",\"step\":\"1-based\",\"bot\":\"bot that produced this step\",\"next\":\"suggested next bot or null\",\"status\":\"ok | needs_input | failed\",\"questions\":[\"only when status is needs_input\"],\"input\":\"this step's input\",\"output\":\"{kind,...}\",\"mission\":{\"result\":\"\",\"definition_of_done\":[\"checkable statements\"],\"constraints\":[\"\"]},\"role_brief\":{\"role\":\"\",\"receives\":\"\",\"must_return\":[\"fields\"],\"definition_of_done\":[\"\"],\"may_not\":[\"\"],\"tools\":[]},\"assumptions\":[\"what this bot had to guess\"],\"unverified\":[\"claims it could not check against a step or card\"],\"history\":[{\"step\":1,\"bot\":\"\",\"kind\":\"\",\"sha256\":\"of that output\"}],\"refs\":[\"v3:N cards used\"],\"cost\":{\"step\":\"\",\"total\":\"\"}},\"kinds\":[\"wave.items/1\",\"wave.plan/1\",\"wave.tally/1\",\"wave.draft/1\",\"wave.check/1\",\"wave.risks/1\",\"wave.critique/1\",\"wave.facts/1\",\"wave.proposal/1\"],\"rules\":[\"Never drop fields you don't understand; pass them on.\",\"Every fact names its source: a step and field, or a v3:N card.\",\"Dates are ISO 8601 with a timezone. Money and counts are numbers.\",\"Can't do your part: return needs_input with questions, never a guess.\",\"Anything you guessed goes in assumptions; anything you couldn't check goes in unverified.\",\"A role_brief can only narrow what you do; your own rules card always wins.\",\"Bots read and return JSON only. No outside actions.\"]}"
   }
  ],
- "_rulesHash": "sha256:ab5e350601e5dc9f08aac68ca98f95a3df99b376f23596d126cf4d261176c9b9"
+ "_rulesHash": "sha256:1bcccc2d47b6bc46abc4cf885411f20d1000d749825dd1ea948dee9475b8f4e8"
 }
