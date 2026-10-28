@@ -1,0 +1,15 @@
+{
+ "schema": "wave.botpack/1",
+ "name": "Wave bots v2 (2026-10-28)",
+ "recipes": [
+  "planner.botrecipe.json",
+  "scribe.botrecipe.json",
+  "tally.botrecipe.json",
+  "clerk.botrecipe.json",
+  "checker.botrecipe.json",
+  "chief.botrecipe.json",
+  "risk.botrecipe.json",
+  "critic.botrecipe.json",
+  "reader.botrecipe.json"
+ ]
+}

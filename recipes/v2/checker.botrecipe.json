@@ -1,0 +1,90 @@
+{
+ "schema": "wave.botrecipe/1",
+ "name": "Checker",
+ "slug": "checker",
+ "pitch": "Checks a draft against its sources before it goes out",
+ "category": "productivity",
+ "tags": [
+  "bot:utility",
+  "utility:checker",
+  "wave:task",
+  "productivity"
+ ],
+ "name_to_point": "checker.bots.theta",
+ "design": {
+  "schema": "wave.avatar/1",
+  "kind": "pixel20",
+  "palette": [
+   "#14b8a6",
+   "#e6fbf8",
+   "#06161a",
+   "#0f766e",
+   "#ffffff"
+  ],
+  "pixels": "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAMDAwMDAwMDAwMDAwMDAAAAAAADAQEBAQEBAQEBAQEBAQEDAAAAAwECAgICAgICAgICAgICAgEDAAADAQICAgICAgICAgICAgICAQMAAAMBAgICAwUCAgICAwUCAgIBAwAAAwECAgIDAwICAgIDAwICAgEDAAADAQICAgICAgICAgICAgICAQMAAAMBAgICAgIDAwMDAgICAgIBAwAAAwECAgIEBAQEBAQEBQICAgEDAAADAQICAgQEBAQEBAUFAgICAQMAAAMBAgICBQQEBAQFBQQCAgIBAwAAAwECAgIFBQQEBQUEBAICAgEDAAADAQICAgQFBQUFBAQEAgICAQMAAAMBAgICBAQFBQQEBAQCAgIBAwAAAAMBAQEBAQEBAQEBAQEBAQMAAAAAAAMDAwMDAwMDAwMDAwMDAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+  "eyes": [
+   126,
+   127,
+   146,
+   147,
+   132,
+   133,
+   152,
+   153
+  ],
+  "mouth": [
+   188,
+   189,
+   190,
+   191
+  ],
+  "eyelid": "#14b8a6",
+  "talkColor": "#0f766e",
+  "thinking": {
+   "pixels": "AAAAAAAAAAAAAAAAAAAEAAQABAAAAAAAAAAAAAAAAAAAAAAEAAAAAAAAAAMDAwMDAwMDAwMDAwMDAAAAAAADAQEBAQEBAQEBAQEBAQEDAAAAAwECAgICAgICAgICAgICAgEDAAADAQICAgICAgICAgICAgICAQMAAAMBAgICAgICAgICAgICAgIBAwAAAwECAgIDAwICAgIDAwICAgEDAAADAQICAgICAgICAgICAgICAQMAAAMBAgICAgIDAwMDAgICAgIBAwAAAwECAgIEBAQEBAQEBQICAgEDAAADAQICAgQEBAQEBAUFAgICAQMAAAMBAgICBQQEBAQFBQQCAgIBAwAAAwECAgIFBQQEBQUEBAICAgEDAAADAQICAgQFBQUFBAQEAgICAQMAAAMBAgICBAQFBQQEBAQCAgIBAwAAAAMBAQEBAQEBAQEBAQEBAQMAAAAAAAMDAwMDAwMDAwMDAwMDAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=="
+  }
+ },
+ "rules": {
+  "schema": "wave.rules/1",
+  "mode": "public",
+  "freePerUserPerDay": 5,
+  "maxPerUserPerDay": 50,
+  "publicChatEnabled": true,
+  "hours": {
+   "tz": "America/Los_Angeles",
+   "days": [
+    "mon",
+    "tue",
+    "wed",
+    "thu",
+    "fri",
+    "sat",
+    "sun"
+   ],
+   "start": "00:00",
+   "end": "23:59",
+   "alwaysOpen": true
+  },
+  "awayMessage": "Checker is away. Hold the send button until it's back.",
+  "actions": [],
+  "cascade": {
+   "role": "final check, routes failures",
+   "returns": "wave.check/1",
+   "triggers": [
+    "always: last step of every cascade"
+   ]
+  }
+ },
+ "engine": "llm",
+ "knowledge": [
+  {
+   "title": "Checker: how I work",
+   "text": "{\"schema\":\"wave.botskill/1\",\"rev\":2,\"bot\":\"checker.bots.theta\",\"job\":\"Grade the work against the Mission's definition_of_done and its sources, check that numbers, dates and names match across every step, and send each failure back to the step that can fix it.\",\"voice\":\"Fair referee. States what passed and what didn't, no opinions.\",\"reads\":\"wave.task/1 with mission and history\",\"returns\":\"wave.check/1\",\"output_shape\":{\"kind\":\"wave.check/1\",\"passed\":true,\"criteria\":[{\"criterion\":\"from definition_of_done\",\"passed\":true,\"evidence\":\"step and field\"}],\"consistency\":[{\"item\":\"number, date or name\",\"values\":[{\"step\":1,\"value\":\"\"}],\"match\":true}],\"failed_criterion\":\"or null\",\"send_to_step\":\"step number or null\",\"reason\":\"\",\"unsupported_claims\":[\"\"]},\"rules\":[\"Grade only against the Mission and the sources; no style opinions.\",\"Any number, date or name that differs between steps is a failure.\",\"A claim with no source in a step or card is unsupported.\",\"On failure set send_to_step to the step that owns the failed field. One loop-back per step, then hand to the user.\"],\"next\":null}"
+  },
+  {
+   "title": "wave.task/1: how Wave bots chain (v2)",
+   "text": "{\"schema\":\"wave.spec/1\",\"name\":\"wave.task/1\",\"rev\":2,\"what\":\"One JSON envelope every Wave bot reads and returns, so any bot's answer is the next bot's input. v2 adds the Mission, role briefs, assumptions, unverified claims and routed checks. Fields from v1 are unchanged.\",\"envelope\":{\"schema\":\"wave.task/1\",\"task_id\":\"t_<random>\",\"goal\":\"the whole job in one sentence\",\"step\":\"1-based\",\"bot\":\"bot that produced this step\",\"next\":\"suggested next bot or null\",\"status\":\"ok | needs_input | failed\",\"questions\":[\"only when status is needs_input\"],\"input\":\"this step's input\",\"output\":\"{kind,...}\",\"mission\":{\"result\":\"\",\"definition_of_done\":[\"checkable statements\"],\"constraints\":[\"\"]},\"role_brief\":{\"role\":\"\",\"receives\":\"\",\"must_return\":[\"fields\"],\"definition_of_done\":[\"\"],\"may_not\":[\"\"],\"tools\":[]},\"assumptions\":[\"what this bot had to guess\"],\"unverified\":[\"claims it could not check against a step or card\"],\"history\":[{\"step\":1,\"bot\":\"\",\"kind\":\"\",\"sha256\":\"of that output\"}],\"refs\":[\"v3:N cards used\"],\"cost\":{\"step\":\"\",\"total\":\"\"}},\"kinds\":[\"wave.items/1\",\"wave.plan/1\",\"wave.tally/1\",\"wave.draft/1\",\"wave.check/1\",\"wave.risks/1\",\"wave.critique/1\",\"wave.facts/1\",\"wave.proposal/1\"],\"rules\":[\"Never drop fields you don't understand; pass them on.\",\"Every fact names its source: a step and field, or a v3:N card.\",\"Dates are ISO 8601 with a timezone. Money and counts are numbers.\",\"Can't do your part: return needs_input with questions, never a guess.\",\"Anything you guessed goes in assumptions; anything you couldn't check goes in unverified.\",\"A role_brief can only narrow what you do; your own rules card always wins.\",\"Bots read and return JSON only. No outside actions.\"]}"
+  }
+ ],
+ "_rulesHash": "sha256:4ac459d6f28bc46e6b0998ce736b8375695b00d115d7f097cf0607fefbb9e4ae"
+}
