@@ -1,0 +1,69 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex">
+<title>Create and point bots.theta names</title>
+<style>
+body{background:#0b0f19;color:#e5e7eb;font-family:system-ui,Segoe UI,Arial,sans-serif;max-width:860px;margin:30px auto;padding:0 16px}
+h1{font-size:22px;margin:0 0 6px}p{color:#9ca3af;line-height:1.5}
+button{background:#22D3EE;color:#0b0f19;border:0;border-radius:6px;padding:8px 14px;font-weight:600;cursor:pointer}
+button:disabled{opacity:.4;cursor:default}button.sec{background:#1f2937;color:#e5e7eb}
+table{width:100%;border-collapse:collapse;margin-top:16px;font-size:14px}td,th{border-bottom:1px solid #1f2937;padding:8px 6px;text-align:left;vertical-align:middle}
+input{background:#111827;color:#e5e7eb;border:1px solid #374151;border-radius:5px;padding:6px;width:90px}
+.ok{color:#34d399}.warn{color:#fbbf24}.err{color:#f87171}.mono{font-family:ui-monospace,Consolas,monospace;font-size:12px}
+#log{background:#111827;border-radius:8px;padding:10px;margin-top:16px;white-space:pre-wrap;font-family:ui-monospace,Consolas,monospace;font-size:12px;min-height:40px}
+label{color:#9ca3af;font-size:14px}
+</style></head><body>
+<h1>Create and point bots.theta names</h1>
+<p>One-time admin page for the 4 new bots. It creates <b>&lt;bot&gt;.bots.theta</b> on the TNS registry with the public resolver, owned by the treasury. Leave Listing empty: the Wave OS publish wizard points the name after the bot is minted. (If a listing already exists, enter v3:N and it also writes <span class="mono">wave.bot</span>.) Sign with the <b>bots.theta owner</b> (treasury 0xcb20…1894) in MetaMask on Theta mainnet. About 0.33 TFUEL per name to create.</p>
+<button id="connect">Connect MetaMask</button> <span id="who" class="mono"></span>
+<table><thead><tr><th>Name</th><th>Listing</th><th>On chain now</th><th></th></tr></thead><tbody id="rows"></tbody></table>
+<div id="log">Not connected.</div>
+<script src="../keccak.js"></script>
+<script>
+const RPC="https://eth-rpc-api.thetatoken.org/rpc",CHAIN="0x169";
+const REG="0xffc49362fb293bc063fda33e537be608b357e787",RES="0x428101cb7a0d22587a6f098a518c36af2a1b2e31";
+const SIGNER="0x4e96028447b653e43ff359aaff9f79c0479386db";
+const BOTS=[["chief",""],["risk",""],["critic",""],["reader",""]];
+const enc=new TextEncoder(),hex=b=>[...b].map(x=>x.toString(16).padStart(2,"0")).join("");
+const unhex=h=>Uint8Array.from(h.match(/../g)||[],x=>parseInt(x,16));
+const kh=s=>hex(keccak256(enc.encode(s)));
+function namehash(n){let node="00".repeat(32);for(const l of n.split(".").reverse()){node=hex(keccak256(unhex(node+kh(l))));}return node;}
+const pad=a=>a.toLowerCase().replace(/^0x/,"").padStart(64,"0");
+const word=n=>n.toString(16).padStart(64,"0");
+function strArg(s){const b=enc.encode(s);return word(b.length)+hex(b).padEnd(Math.ceil(b.length/32)*64,"0");}
+const PARENT=namehash("bots.theta");
+let me=null;const log=t=>{document.getElementById("log").textContent=t+"\n"+document.getElementById("log").textContent;};
+async function call(to,data){const r=await fetch(RPC,{method:"POST",headers:{"content-type":"application/json"},body:JSON.stringify({jsonrpc:"2.0",id:1,method:"eth_call",params:[{to,data},"latest"]})});const j=await r.json();if(j.error)throw new Error(j.error.message);return j.result;}
+const addr=r=>"0x"+r.slice(-40);
+async function textRec(node,key){const r=await call(RES,"0x59d1d43c"+node+word(64)+strArg(key));const b=unhex(r.slice(2));const len=parseInt(r.slice(2+64,2+128),16);return new TextDecoder().decode(b.slice(64,64+len));}
+async function state(label){const node=namehash(label+".bots.theta");const o=addr(await call(REG,"0x02571be3"+node));const res=addr(await call(REG,"0x0178b8bf"+node));let wb="";if(res.toLowerCase()===RES)wb=await textRec(node,"wave.bot");return{node,owner:o,res,wb};}
+const zero=a=>/^0x0{40}$/.test(a);
+async function send(data,to,what){log("Sign in MetaMask: "+what);const h=await ethereum.request({method:"eth_sendTransaction",params:[{from:me,to,data}]});log("Sent "+what+": "+h);
+ for(let i=0;i<60;i++){await new Promise(r=>setTimeout(r,3000));const r=await fetch(RPC,{method:"POST",headers:{"content-type":"application/json"},body:JSON.stringify({jsonrpc:"2.0",id:1,method:"eth_getTransactionReceipt",params:[h]})}).then(r=>r.json());if(r.result){if(r.result.status!=="0x1")throw new Error(what+" failed on chain");log("Confirmed: "+what);return;}}throw new Error("Timed out waiting for "+what);}
+function render(){const tb=document.getElementById("rows");tb.innerHTML="";BOTS.forEach(([l,ref],i)=>{tb.insertAdjacentHTML("beforeend",`<tr><td class="mono">${l}.bots.theta</td><td><input id="ref${i}" value="${ref}" placeholder="v3:N"></td><td id="st${i}" class="mono">…</td><td><button id="go${i}" disabled>Create name</button></td></tr>`);document.getElementById("go"+i).onclick=()=>run(i);});}
+async function refresh(i){const l=BOTS[i][0];const c=document.getElementById("st"+i);try{const s=await state(l);
+ if(zero(s.owner))c.innerHTML='<span class="warn">not created</span>';
+ else if(s.res.toLowerCase()!==RES)c.innerHTML='<span class="warn">exists, no resolver</span>';
+ else c.innerHTML=(s.wb?`<span class="ok">wave.bot = ${s.wb}</span>`:'<span class="warn">no wave.bot</span>')+`<br>owner ${s.owner.slice(0,6)}…${s.owner.slice(-4)}`;
+ return s;}catch(e){c.innerHTML='<span class="err">'+e.message+'</span>';}}
+async function run(i){const l=BOTS[i][0],ref=document.getElementById("ref"+i).value.trim();const b=document.getElementById("go"+i);
+ if(ref&&!/^v3:\d+$/.test(ref)){log(l+": listing must look like v3:83, or leave it empty");return;}
+ b.disabled=true;try{
+  if(ref){const chk=await fetch("https://web.oswave.io/functions/waveApi?action=check&ref="+ref).then(r=>r.json()).catch(()=>null);
+  if(!chk||!chk.found||chk.kind!=="bot_listing"){log(l+": "+ref+" is not a readable bot listing ("+(chk&&chk.reason||"check failed")+"). Stopped.");b.disabled=false;return;}}
+  let s=await state(l);
+  if(zero(s.owner)){await send("0x5ef2c7f0"+PARENT+kh(l)+pad(me)+pad(RES)+word(0),REG,"create "+l+".bots.theta");s=await state(l);}
+  if(s.owner.toLowerCase()!==me){log(l+".bots.theta is owned by "+s.owner+". Connect that wallet."); b.disabled=false;return;}
+  if(s.res.toLowerCase()!==RES){await send("0x1896f70a"+s.node+pad(RES),REG,"set resolver on "+l+".bots.theta");}
+  if(ref&&s.wb!==ref){await send("0x10f13a8c"+s.node+word(96)+word(96+32+Math.ceil(8/32)*32)+strArg("wave.bot")+strArg(ref),RES,"point "+l+".bots.theta at "+ref);}
+  s=await refresh(i);
+  log(l+".bots.theta: done."+(ref?"":" The publish wizard will point it after minting."));
+ }catch(e){log("Error: "+e.message);}b.disabled=false;}
+document.getElementById("connect").onclick=async()=>{if(!window.ethereum){log("MetaMask not found.");return;}
+ try{await ethereum.request({method:"wallet_switchEthereumChain",params:[{chainId:CHAIN}]});}catch(e){log("Switch MetaMask to Theta mainnet (chain 361).");return;}
+ me=(await ethereum.request({method:"eth_requestAccounts"}))[0].toLowerCase();
+ const po=addr(await call(REG,"0x02571be3"+PARENT)).toLowerCase();
+ document.getElementById("who").textContent=me.slice(0,6)+"…"+me.slice(-4)+(po===me?"  (owns bots.theta)":"  (NOT the bots.theta owner "+po.slice(0,6)+"…"+po.slice(-4)+")");
+ BOTS.forEach((_,i)=>document.getElementById("go"+i).disabled=false);log("Connected "+me);};
+render();BOTS.forEach((_,i)=>refresh(i));
+</script></body></html>
