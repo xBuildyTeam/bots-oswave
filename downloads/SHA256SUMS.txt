@@ -1,1 +1,2 @@
 e9f9e794b60be249af90db19d16a34880049b306bc7bcde8d549b40bd834daf9  wave-wallet-mint-0.4.1.zip
+87477eebf9af16985128f256d592faeb2116a8f4224a3f501de5fe4acfe1d433  wave-wallet-mint-0.4.2.zip
