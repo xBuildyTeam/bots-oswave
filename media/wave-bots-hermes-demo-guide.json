@@ -1,0 +1,128 @@
+{
+ "schema": "wave.videoguide/1",
+ "video": "https://bots.oswave.io/media/wave-bots-hermes-demo.mp4",
+ "poster": "https://bots.oswave.io/media/wave-bots-hermes-demo-poster.jpg",
+ "title": "Wave | Bots for Hermes: demo",
+ "page": "https://oswave.io/bots",
+ "duration_s": 72.6,
+ "silent": true,
+ "captioned": false,
+ "summary": "A 73-second silent screen recording of the Wave | Bots plugin in Hermes Agent: open the bot store, check Maker on the Theta blockchain, add it to Hermes, ask Maker to help make a bot on Wave and get its interview questions, then a quick tour of the Added, Connection, About and Build bots on Wave tabs.",
+ "how_to_use": "Times are seconds from the start of the video (accurate to about half a second). Use the step whose start <= current time < end to explain what's on screen.",
+ "chapters": [],
+ "steps": [
+  {
+   "start": 0,
+   "end": 4.0,
+   "caption": "Opening Wave | Bots",
+   "explain": "Hermes Agent (the AI agent app by Nous Research) is open, and the user clicks Wave | Bots in the sidebar.",
+   "narration": "Hi, I'm Wavey. Let's open Wave Bots in Hermes.",
+   "audio": "https://bots.oswave.io/media/wavey-voice-bots/b00.mp3",
+   "audio_s": 2.93
+  },
+  {
+   "start": 4.0,
+   "end": 10.5,
+   "caption": "The bot store",
+   "explain": "The Store tab lists official bots from the bots.theta store: each one Verified on Theta, Official and Free. The header says everything is checked on the Theta blockchain on this computer, runs on your own AI, and needs no account.",
+   "narration": "This is the bot store. Every bot is checked on the Theta blockchain.",
+   "audio": "https://bots.oswave.io/media/wavey-voice-bots/b01.mp3",
+   "audio_s": 3.67
+  },
+  {
+   "start": 10.5,
+   "end": 16.8,
+   "caption": "Maker's page",
+   "explain": "Maker (maker.bots.theta) makes a complete Wave bot recipe with you, then guides your next steps. Its page shows its knowledge cards and the checks done on Theta on this computer: the name points to its listing, and the fingerprints match.",
+   "narration": "Here's Maker. Its name, listing and cards are checked on Theta, right here.",
+   "audio": "https://bots.oswave.io/media/wavey-voice-bots/b02.mp3",
+   "audio_s": 4.58
+  },
+  {
+   "start": 16.8,
+   "end": 21.4,
+   "caption": "Add Maker to Hermes",
+   "explain": "The Add sheet explains what you get: Maker runs on your own AI model in Hermes and nothing is paid to Wave; it answers from its 6 knowledge cards checked on Theta just now; it can't use the terminal, files, browser, code, web, memory or scheduled jobs, MCP servers are off; and it's re-checked on Theta once a day and pauses itself if a check fails.",
+   "narration": "It's safe: no tools, your own AI, and nothing paid.",
+   "audio": "https://bots.oswave.io/media/wavey-voice-bots/b03.mp3",
+   "audio_s": 3.82
+  },
+  {
+   "start": 21.4,
+   "end": 26.5,
+   "caption": "Added",
+   "explain": "Added (1): Maker is now in the Hermes Bots list, ready to open from Bots in the sidebar.",
+   "narration": "Maker is now in your Hermes Bots list.",
+   "audio": "https://bots.oswave.io/media/wavey-voice-bots/b04.mp3",
+   "audio_s": 2.33
+  },
+  {
+   "start": 26.5,
+   "end": 37.6,
+   "caption": "Ask Maker",
+   "explain": "The user opens Maker from Bots in the Hermes sidebar and types: help me make a bot on Wave.",
+   "narration": "Open Maker and ask it to help you make a bot on Wave.",
+   "audio": "https://bots.oswave.io/media/wavey-voice-bots/b05.mp3",
+   "audio_s": 2.78
+  },
+  {
+   "start": 37.6,
+   "end": 46.5,
+   "caption": "Maker answers",
+   "explain": "Maker answers on the user's own Hermes model, using only its verified cards.",
+   "narration": "Maker answers from its own verified cards.",
+   "audio": "https://bots.oswave.io/media/wavey-voice-bots/b06.mp3",
+   "audio_s": 2.47
+  },
+  {
+   "start": 46.5,
+   "end": 57.1,
+   "caption": "Maker's interview",
+   "explain": "Maker interviews you with pick-or-type questions: what the bot should do, who it's for, what voice it should use, its color and mascot (and an optional .theta name), and what notes, facts or sources it should know.",
+   "narration": "It interviews you: what your bot does, who it's for, its voice, its look, and what it should know.",
+   "audio": "https://bots.oswave.io/media/wavey-voice-bots/b07.mp3",
+   "audio_s": 6.02
+  },
+  {
+   "start": 57.1,
+   "end": 62.3,
+   "caption": "Back to Wave | Bots",
+   "explain": "Back in Wave | Bots: the Store, then the Added tab with Maker.",
+   "narration": "Back in Wave Bots, the Added tab keeps your bots.",
+   "audio": "https://bots.oswave.io/media/wavey-voice-bots/b08.mp3",
+   "audio_s": 3.0
+  },
+  {
+   "start": 62.3,
+   "end": 64.3,
+   "caption": "Connection",
+   "explain": "The Connection tab: everything else works without an account. Connecting Wave OS adds one thing, asking the real bot on Wave OS with a receipt.",
+   "narration": "Connection links Wave OS.",
+   "audio": "https://bots.oswave.io/media/wavey-voice-bots/b09.mp3",
+   "audio_s": 1.61
+  },
+  {
+   "start": 64.3,
+   "end": 67.3,
+   "caption": "About",
+   "explain": "The About tab explains how Wave bots are different: the bot's listing is on the Theta blockchain, nobody can quietly change it, it's re-checked every day, and it pauses itself if a check fails.",
+   "narration": "About shows what makes Wave bots different.",
+   "audio": "https://bots.oswave.io/media/wavey-voice-bots/b10.mp3",
+   "audio_s": 2.11
+  },
+  {
+   "start": 67.3,
+   "end": 72.6,
+   "caption": "Build bots on Wave",
+   "explain": "The Build bots on Wave tab: add Maker, get your recipe, then bring it to the Wave Bots app to check, mint and name your own bot on Theta, in 6 steps.",
+   "narration": "And Build shows how to make and mint your own bot.",
+   "audio": "https://bots.oswave.io/media/wavey-voice-bots/b11.mp3",
+   "audio_s": 2.52
+  }
+ ],
+ "narration_note": "Pre-written lines for Wavey to show as the video plays (no AI call). Show each step's narration at its start.",
+ "voice": {
+  "name": "Andrew",
+  "note": "Pre-recorded narration, one clip per line (Microsoft Edge neural voice en-US-AndrewNeural). Play each clip when its line appears."
+ }
+}
