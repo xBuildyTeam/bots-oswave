@@ -1,0 +1,144 @@
+{
+ "schema": "wave.videoguide/1",
+ "video": "https://bots.oswave.io/media/wave-brainvault-mint-hermes-demo.mp4",
+ "title": "Wave | BrainVault Mint for Hermes: full demo",
+ "page": "https://oswave.io/hermes",
+ "duration_s": 154.6,
+ "silent": true,
+ "captioned": true,
+ "summary": "A 2½-minute silent, captioned walkthrough of the Wave | BrainVault Mint plugin for Hermes Agent: set up Wave Wallet Mint and sign in to Wave Web, save and mint one private memory card, turn a whole page into 8 cards minted with one approval, then recall a memory from the vault on Theta. Wallet balances and emails are blurred.",
+ "how_to_use": "Times are seconds from the start of the full video (accurate to about half a second). Use the step whose start <= current time < end to explain what's on screen. The short 68-second version (wave-brainvault-mint-hermes-demo-short.mp4) shows the same flow faster and doesn't follow these times.",
+ "plugin_version_shown": "0.6.1",
+ "chapters": [
+  {
+   "title": "Part 1: Set up your wallet",
+   "start": 6.5,
+   "end": 32.7
+  },
+  {
+   "title": "Part 2: Your first memory card",
+   "start": 32.7,
+   "end": 70.3
+  },
+  {
+   "title": "Part 3: A whole page, one approval",
+   "start": 70.3,
+   "end": 127.6
+  },
+  {
+   "title": "Part 4: Recall anywhere",
+   "start": 127.6,
+   "end": 141.9
+  }
+ ],
+ "steps": [
+  {
+   "start": 0,
+   "end": 3.0,
+   "caption": "Connecting",
+   "explain": "Hermes Agent (the AI agent app by Nous Research) is opening the Wave | BrainVault Mint page and connecting to Wave."
+  },
+  {
+   "start": 3.0,
+   "end": 6.5,
+   "caption": "Wave | BrainVault Mint: memory you own.",
+   "explain": "The plugin's name and what it does: memory you own, minted to your own wallet on the Theta blockchain, readable by you and your Hermes."
+  },
+  {
+   "start": 8.7,
+   "end": 18.7,
+   "caption": "Install Wave Wallet Mint in Chrome and open your wallet. Your keys stay in the wallet.",
+   "explain": "Wave Wallet Mint is Wave's Chrome wallet extension (download at oswave.io/mint). The viewer installs it and opens it. The wallet keeps the keys; Hermes and the plugin never get them."
+  },
+  {
+   "start": 18.7,
+   "end": 22.7,
+   "caption": "Your wallet on Theta mainnet. It pays for minting in TFUEL.",
+   "explain": "The wallet is on Theta mainnet. Minting a memory card costs a small network fee in TFUEL, Theta's gas token, paid from this wallet. The balance is blurred in the video."
+  },
+  {
+   "start": 22.7,
+   "end": 32.7,
+   "caption": "Sign in to Wave Web with Wave Wallet Mint. Free, no transaction.",
+   "explain": "Wave Web (web.oswave.io) is where cards are minted. Signing in uses the wallet to sign a message, which is free and isn't a transaction."
+  },
+  {
+   "start": 34.9,
+   "end": 48.5,
+   "caption": "Wave | BrainVault Mint lives in Hermes: paired with your wallet, private by default.",
+   "explain": "The Wave | BrainVault Mint page inside Hermes. It's paired with the wallet once (Hermes gets a decrypt-only agent key that can't sign or spend and can be revoked in the wallet). Memories are private by default."
+  },
+  {
+   "start": 48.5,
+   "end": 54.9,
+   "caption": "Teach Hermes something worth keeping. It's saved on this computer first.",
+   "explain": "The viewer tells Hermes a fact worth keeping. Hermes saves it on this computer straight away, so recall works instantly even before anything is minted."
+  },
+  {
+   "start": 54.9,
+   "end": 62.3,
+   "caption": "Send it to Wave: one card, about 1.2 TFUEL, Readable by Me + Hermes.",
+   "explain": "Send to Wave opens Wave Web's Quick mint for one card, about 1.2 TFUEL. 'Readable by: Me + Hermes' means the card is encrypted so only the owner's wallet and this paired Hermes can open it."
+  },
+  {
+   "start": 62.3,
+   "end": 70.3,
+   "caption": "Sync: Hermes reads the card from Theta and opens it with its own key.",
+   "explain": "Sync: Hermes reads the card back from the Theta blockchain, opens it with its own agent key and checks its fingerprint. This is how a new computer gets its memories back."
+  },
+  {
+   "start": 72.5,
+   "end": 84.7,
+   "caption": "Paste a whole page. Hermes turns it into 8 private memory cards and estimates the cost.",
+   "explain": "Paste a whole web page or document. The plugin turns it into 8 clean memory cards (one idea per card, private by default) and shows the estimated TFUEL cost."
+  },
+  {
+   "start": 84.7,
+   "end": 94.2,
+   "caption": "Review and edit them, then Send selected to Wave. Nothing is spent yet.",
+   "explain": "The viewer reviews and edits the cards, then picks Send selected to Wave. Nothing is spent at this step."
+  },
+  {
+   "start": 94.2,
+   "end": 101.9,
+   "caption": "Quick mint on Wave Web: Readable by Me + Hermes on this computer.",
+   "explain": "Wave Web's Quick mint lists all the cards, the cost, and 'Readable by: Me + Hermes on this computer'."
+  },
+  {
+   "start": 101.9,
+   "end": 109.9,
+   "caption": "One Wave Wallet Mint approval. The plugin never sees your wallet key.",
+   "explain": "One approval in Wave Wallet Mint mints all the cards. Private cards are encrypted in the wallet before they reach the chain. The plugin never sees the wallet key."
+  },
+  {
+   "start": 109.9,
+   "end": 118.7,
+   "caption": "All 8 cards minted in 1 transaction on Theta (v3:327 to v3:334).",
+   "explain": "All 8 cards were minted in one transaction on Theta (card numbers v3:327 to v3:334)."
+  },
+  {
+   "start": 118.7,
+   "end": 127.6,
+   "caption": "Sync: 9 on chain, opened with this Hermes's own key, every fingerprint checked.",
+   "explain": "Sync again: 9 cards are now on chain, opened with this Hermes's own key, and every fingerprint checked."
+  },
+  {
+   "start": 129.8,
+   "end": 141.9,
+   "caption": "Ask “when is the demo due?” Hermes recalls it from your vault on Theta.",
+   "explain": "The viewer asks 'when is the demo due?' and Hermes answers from the memory vault on Theta, so the memory works on any paired computer."
+  },
+  {
+   "start": 141.9,
+   "end": 148.9,
+   "caption": "Built to be trusted",
+   "explain": "Safety points: the plugin never signs, never mints and never sees the wallet key; cards are private by default, encrypted to you and your Hermes; seed phrases, keys and passwords are blocked from becoming cards; every card read from Theta is fingerprint-checked; it's open source (MIT)."
+  },
+  {
+   "start": 148.9,
+   "end": 154.4,
+   "caption": "Get it on GitHub · oswave.io/hermes",
+   "explain": "Get it at github.com/xBuildyTeam/wave-os-hermes. More at oswave.io/hermes. Hermes puts your agent in any browser; Wave puts your agent's memory on any machine."
+  }
+ ]
+}
