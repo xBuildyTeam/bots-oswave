@@ -1,0 +1,239 @@
+{
+ "schema": "wave.chatguide/1",
+ "app": "Wave Web Build",
+ "speaker": "Wave",
+ "voice": {
+  "name": "Andrew",
+  "note": "Pre-recorded, en-US-AndrewNeural, one clip per step."
+ },
+ "how_to_use": "Each flow is a list of steps. Show a step as an assistant message (typed ~45 chars/s, instant with reduced motion) and play its audio. 'advance_on' lists the events (separated by |) that move to the next step; 'auto' means show the next step right after this one finishes; 'next' means the Next button; 'end' is the last step. Events: file_or_link_sent, project_created, card_opened, card_created, mint_done, user_message, quickstart_saved, mint_tab_opened, source_picked, file_or_paste_sent, migration_created, cards_ready.",
+ "notes": {
+  "m2": "Show the existing per-source how-to (uploadHint) as the text, with this line spoken. The per-source text is not voiced.",
+  "tip": "Show once per project, after p4."
+ },
+ "flows": {
+  "project": {
+   "chip": "Create Project",
+   "steps": [
+    {
+     "id": "p1",
+     "text": "Let's make a project. A project turns a document or a web page into cards you can mint to Theta.",
+     "advance_on": "auto",
+     "audio": "https://bots.oswave.io/media/wave-build-voice/p1.mp3",
+     "audio_s": 5.57
+    },
+    {
+     "id": "p2",
+     "text": "Upload a PDF with the plus button, or paste a web address and send it.",
+     "advance_on": "file_or_link_sent",
+     "audio": "https://bots.oswave.io/media/wave-build-voice/p2.mp3",
+     "audio_s": 4.78
+    },
+    {
+     "id": "p3",
+     "text": "Reading it now. I'm splitting it into suggested cards and a manifest.",
+     "advance_on": "project_created",
+     "audio": "https://bots.oswave.io/media/wave-build-voice/p3.mp3",
+     "audio_s": 4.15
+    },
+    {
+     "id": "p4",
+     "text": "Your project is open on the left. Check the Manifest tab first, then the Cards tab.",
+     "advance_on": "next|card_opened",
+     "audio": "https://bots.oswave.io/media/wave-build-voice/p4.mp3",
+     "audio_s": 4.87
+    },
+    {
+     "id": "tip",
+     "text": "Want something from our chat on a card? Highlight it, save it as a Clip, then use To project.",
+     "advance_on": "auto",
+     "audio": "https://bots.oswave.io/media/wave-build-voice/tip.mp3",
+     "audio_s": 5.18
+    },
+    {
+     "id": "p5",
+     "text": "Click a card to review it. It also fills in the Mint tab on the right.",
+     "advance_on": "card_opened",
+     "audio": "https://bots.oswave.io/media/wave-build-voice/p5.mp3",
+     "audio_s": 3.77
+    },
+    {
+     "id": "p6",
+     "text": "Mint the manifest first, then your cards. Every mint shows the TFUEL price before you approve in your wallet.",
+     "advance_on": "mint_done",
+     "audio": "https://bots.oswave.io/media/wave-build-voice/p6.mp3",
+     "audio_s": 6.53
+    },
+    {
+     "id": "p7",
+     "text": "Minted! Your cards are in Mint history, and they open read-only. To change one later, you mint a new card that replaces it.",
+     "advance_on": "end",
+     "audio": "https://bots.oswave.io/media/wave-build-voice/p7.mp3",
+     "audio_s": 7.22
+    }
+   ]
+  },
+  "card": {
+   "chip": "Mint Card",
+   "steps": [
+    {
+     "id": "c1",
+     "text": "Let's mint one card. Tell me what it's about, or paste the text you want on it.",
+     "advance_on": "user_message",
+     "audio": "https://bots.oswave.io/media/wave-build-voice/c1.mp3",
+     "audio_s": 4.13
+    },
+    {
+     "id": "c2",
+     "text": "I'll shape it into a good card: a clear title, a line saying what it's for, short facts, and under 2,500 bytes.",
+     "advance_on": "card_created",
+     "audio": "https://bots.oswave.io/media/wave-build-voice/c2.mp3",
+     "audio_s": 8.35
+    },
+    {
+     "id": "c3",
+     "text": "Your card is open in the Open card tab and ready in the Mint tab. Change anything by asking me, or edit it there.",
+     "advance_on": "next",
+     "audio": "https://bots.oswave.io/media/wave-build-voice/c3.mp3",
+     "audio_s": 6.22
+    },
+    {
+     "id": "c4",
+     "text": "Public or private? Anyone can read a public card. A private card is encrypted in Wave Wallet Mint before it goes on chain, so only you can read it.",
+     "advance_on": "next",
+     "audio": "https://bots.oswave.io/media/wave-build-voice/c4.mp3",
+     "audio_s": 8.69
+    },
+    {
+     "id": "c5",
+     "text": "Check the price, then click Mint and approve in your wallet.",
+     "advance_on": "mint_done",
+     "audio": "https://bots.oswave.io/media/wave-build-voice/c5.mp3",
+     "audio_s": 3.19
+    },
+    {
+     "id": "c6",
+     "text": "Minted! It's in Mint history. Click it any time to review it.",
+     "advance_on": "end",
+     "audio": "https://bots.oswave.io/media/wave-build-voice/c6.mp3",
+     "audio_s": 3.77
+    }
+   ]
+  },
+  "site": {
+   "chip": "Build Wave Site",
+   "steps": [
+    {
+     "id": "s1",
+     "text": "Let's build a Wave Site. It's stored on Theta as cards, and a .theta name can point people to it.",
+     "advance_on": "auto",
+     "audio": "https://bots.oswave.io/media/wave-build-voice/s1.mp3",
+     "audio_s": 5.95
+    },
+    {
+     "id": "s2",
+     "text": "You get up to 20 pages, 50 cards and 200 kilobytes, with sections, colors, a nav and a footer. No scripts, and links stay inside your site.",
+     "advance_on": "next",
+     "audio": "https://bots.oswave.io/media/wave-build-voice/s2.mp3",
+     "audio_s": 10.32
+    },
+    {
+     "id": "s3",
+     "text": "Start with Quick start on the left: a name, your .theta name, and a tip wallet if you want one.",
+     "advance_on": "next|quickstart_saved",
+     "audio": "https://bots.oswave.io/media/wave-build-voice/s3.mp3",
+     "audio_s": 5.45
+    },
+    {
+     "id": "s4",
+     "text": "Now tell me about your site: who it's for, the pages you want, and the look.",
+     "advance_on": "user_message",
+     "audio": "https://bots.oswave.io/media/wave-build-voice/s4.mp3",
+     "audio_s": 4.42
+    },
+    {
+     "id": "s5",
+     "text": "Here's your site in Preview. Ask me for changes, or fine-tune it in the Project, Design and Advanced tabs on the right.",
+     "advance_on": "next|mint_tab_opened",
+     "audio": "https://bots.oswave.io/media/wave-build-voice/s5.mp3",
+     "audio_s": 6.84
+    },
+    {
+     "id": "s6",
+     "text": "When it looks right, open Mint. The plan lists every card and the TFUEL total before you approve.",
+     "advance_on": "mint_done",
+     "audio": "https://bots.oswave.io/media/wave-build-voice/s6.mp3",
+     "audio_s": 5.81
+    },
+    {
+     "id": "s7",
+     "text": "It's live on Theta. Last step: point your .theta name at your Home card so people can visit it.",
+     "advance_on": "end",
+     "audio": "https://bots.oswave.io/media/wave-build-voice/s7.mp3",
+     "audio_s": 5.71
+    }
+   ]
+  },
+  "migration": {
+   "chip": "Start Migration",
+   "steps": [
+    {
+     "id": "m1",
+     "text": "Let's move your data to Wave. Where is it coming from? Pick a source below, or type it.",
+     "advance_on": "source_picked",
+     "audio": "https://bots.oswave.io/media/wave-build-voice/m1.mp3",
+     "audio_s": 4.78
+    },
+    {
+     "id": "m2",
+     "text": "Here's how to get your data out. Follow the steps, then come back.",
+     "advance_on": "next|file_or_paste_sent",
+     "audio": "https://bots.oswave.io/media/wave-build-voice/m2.mp3",
+     "audio_s": 3.55
+    },
+    {
+     "id": "m3",
+     "text": "In the Manifest tab, give your migration a title and choose whether to track its source.",
+     "advance_on": "next",
+     "audio": "https://bots.oswave.io/media/wave-build-voice/m3.mp3",
+     "audio_s": 4.85
+    },
+    {
+     "id": "m4",
+     "text": "Upload your file with the plus button, up to 50 megabytes, or paste the text and send it.",
+     "advance_on": "migration_created",
+     "audio": "https://bots.oswave.io/media/wave-build-voice/m4.mp3",
+     "audio_s": 5.38
+    },
+    {
+     "id": "m5",
+     "text": "Got it. I'm splitting it into one-idea cards.",
+     "advance_on": "cards_ready",
+     "audio": "https://bots.oswave.io/media/wave-build-voice/m5.mp3",
+     "audio_s": 2.78
+    },
+    {
+     "id": "m6",
+     "text": "Review your cards in the Open migration tab, then scan and freeze them in the editor. Remove anything you don't want on chain.",
+     "advance_on": "next",
+     "audio": "https://bots.oswave.io/media/wave-build-voice/m6.mp3",
+     "audio_s": 7.25
+    },
+    {
+     "id": "m7",
+     "text": "Then mint them. Choose private or public first. Big migrations mint in batches, and you see the TFUEL total before you approve.",
+     "advance_on": "mint_done",
+     "audio": "https://bots.oswave.io/media/wave-build-voice/m7.mp3",
+     "audio_s": 7.58
+    },
+    {
+     "id": "m8",
+     "text": "Done! Your cards are on Theta, and they belong to you.",
+     "advance_on": "end",
+     "audio": "https://bots.oswave.io/media/wave-build-voice/m8.mp3",
+     "audio_s": 3.17
+    }
+   ]
+  }
+ }
+}
