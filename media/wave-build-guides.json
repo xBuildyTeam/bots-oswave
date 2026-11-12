@@ -6,7 +6,7 @@
   "name": "Andrew",
   "note": "Pre-recorded, en-US-AndrewNeural, one clip per step."
  },
- "how_to_use": "Each flow is a list of steps. Show a step as an assistant message (typed ~45 chars/s, instant with reduced motion) and play its audio. 'advance_on' lists the events (separated by |) that move to the next step; 'auto' means show the next step right after this one finishes; 'next' means the Next button; 'end' is the last step. Events: file_or_link_sent, project_created, card_opened, card_created, mint_done, user_message, quickstart_saved, mint_tab_opened, source_picked, file_or_paste_sent, migration_created, cards_ready.",
+ "how_to_use": "Each flow is a list of steps. Show a step as an assistant message (typed ~45 chars/s, instant with reduced motion) and play its audio. 'advance_on' lists the events (separated by |) that move to the next step; 'auto' means show the next step right after this one finishes; 'next' means the Next button; 'end' is the last step. Events: file_or_link_sent, project_created, card_opened, card_created, mint_done, user_message, quickstart_saved, mint_tab_opened, source_picked, file_or_paste_sent, migration_created, cards_ready. A step may have 'learn_more' {label, steps}: show a button with that label under the step; clicking it plays those extra steps in order (each typed + voiced, one after another, no events needed), then returns to the guide where it was. It never advances the main guide by itself.",
  "notes": {
   "m2": "Show the existing per-source how-to (uploadHint) as the text, with this line spoken. The per-source text is not voiced.",
   "tip": "Show once per project, after p4."
@@ -17,10 +17,45 @@
    "steps": [
     {
      "id": "p1",
-     "text": "Let's make a project. A project turns a document or a web page into cards you can mint to Theta.",
+     "text": "Let's make a project. A project turns a document or a web page into cards you can mint to Theta. Want to know more before you start? Click Learn more.",
      "advance_on": "auto",
-     "audio": "https://bots.oswave.io/media/wave-build-voice/p1.mp3",
-     "audio_s": 5.57
+     "audio": "https://bots.oswave.io/media/wave-build-voice/p1.mp3?v=2",
+     "audio_s": 8.35,
+     "learn_more": {
+      "label": "Learn more",
+      "steps": [
+       {
+        "id": "p1lm1",
+        "text": "Here's how a project works. First you add a source: a PDF or a web page.",
+        "audio": "https://bots.oswave.io/media/wave-build-voice/p1lm1.mp3",
+        "audio_s": 5.09
+       },
+       {
+        "id": "p1lm2",
+        "text": "Wave reads it and suggests cards, one idea per card, plus a manifest that lists them all. You review and edit everything before anything goes on chain.",
+        "audio": "https://bots.oswave.io/media/wave-build-voice/p1lm2.mp3",
+        "audio_s": 9.46
+       },
+       {
+        "id": "p1lm3",
+        "text": "When you mint, Wave Wallet Mint shows the price and signs with your own wallet. Your keys never leave it. Private cards are encrypted there first, so only you can read them, and one approval can mint many cards.",
+        "audio": "https://bots.oswave.io/media/wave-build-voice/p1lm3.mp3",
+        "audio_s": 12.07
+       },
+       {
+        "id": "p1lm4",
+        "text": "Once minted, your cards are permanent and they're yours. Use them as a bot's knowledge, publish a Wave Site from them, or let your AI recall them, like Hermes with Wave BrainVault Mint.",
+        "audio": "https://bots.oswave.io/media/wave-build-voice/p1lm4.mp3",
+        "audio_s": 10.82
+       },
+       {
+        "id": "p1lm5",
+        "text": "That's it. Ready when you are.",
+        "audio": "https://bots.oswave.io/media/wave-build-voice/p1lm5.mp3",
+        "audio_s": 1.7
+       }
+      ]
+     }
     },
     {
      "id": "p2",
