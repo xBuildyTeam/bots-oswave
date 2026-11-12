@@ -113,10 +113,45 @@
    "steps": [
     {
      "id": "c1",
-     "text": "Let's mint one card. Tell me what it's about, or paste the text you want on it.",
+     "text": "Let's mint one card. Tell me what it's about, or paste the text you want on it. Want to know more before you start? Click Learn more.",
      "advance_on": "user_message",
-     "audio": "https://bots.oswave.io/media/wave-build-voice/c1.mp3",
-     "audio_s": 4.13
+     "audio": "https://bots.oswave.io/media/wave-build-voice/c1.mp3?v=2",
+     "audio_s": 6.96,
+     "learn_more": {
+      "label": "Learn more",
+      "steps": [
+       {
+        "id": "c1lm1",
+        "text": "A card is one idea, stored on Theta forever. Keep it short and clear, up to 2,500 bytes for a public card.",
+        "audio": "https://bots.oswave.io/media/wave-build-voice/c1lm1.mp3",
+        "audio_s": 7.99
+       },
+       {
+        "id": "c1lm2",
+        "text": "Anyone can read a public card. A private card is encrypted in Wave Wallet Mint first, so only you can read it.",
+        "audio": "https://bots.oswave.io/media/wave-build-voice/c1lm2.mp3",
+        "audio_s": 6.31
+       },
+       {
+        "id": "c1lm3",
+        "text": "Wave Wallet Mint shows the price and signs with your own wallet. Your keys never leave it.",
+        "audio": "https://bots.oswave.io/media/wave-build-voice/c1lm3.mp3",
+        "audio_s": 4.92
+       },
+       {
+        "id": "c1lm4",
+        "text": "Once minted, a card can't be edited. To change it, you mint a new card that replaces it.",
+        "audio": "https://bots.oswave.io/media/wave-build-voice/c1lm4.mp3",
+        "audio_s": 5.35
+       },
+       {
+        "id": "c1lm5",
+        "text": "Cards can become a bot's knowledge, part of a Wave Site, or memory your AI can recall. Ready when you are.",
+        "audio": "https://bots.oswave.io/media/wave-build-voice/c1lm5.mp3",
+        "audio_s": 6.55
+       }
+      ]
+     }
     },
     {
      "id": "c2",
@@ -160,10 +195,45 @@
    "steps": [
     {
      "id": "s1",
-     "text": "Let's build a Wave Site. It's stored on Theta as cards, and a .theta name can point people to it.",
+     "text": "Let's build a Wave Site. It's stored on Theta as cards, and a .theta name can point people to it. Want to know more before you start? Click Learn more.",
      "advance_on": "auto",
-     "audio": "https://bots.oswave.io/media/wave-build-voice/s1.mp3",
-     "audio_s": 5.95
+     "audio": "https://bots.oswave.io/media/wave-build-voice/s1.mp3?v=2",
+     "audio_s": 8.78,
+     "learn_more": {
+      "label": "Learn more",
+      "steps": [
+       {
+        "id": "s1lm1",
+        "text": "A Wave Site is a website stored on Theta as cards. No server, and no host that can take it down.",
+        "audio": "https://bots.oswave.io/media/wave-build-voice/s1lm1.mp3",
+        "audio_s": 6.19
+       },
+       {
+        "id": "s1lm2",
+        "text": "You build it here: pages, sections, colors, a nav and a footer. Preview it before anything is minted.",
+        "audio": "https://bots.oswave.io/media/wave-build-voice/s1lm2.mp3",
+        "audio_s": 7.51
+       },
+       {
+        "id": "s1lm3",
+        "text": "Minting puts every page on chain in one plan, with the TFUEL total shown before you approve in Wave Wallet Mint.",
+        "audio": "https://bots.oswave.io/media/wave-build-voice/s1lm3.mp3",
+        "audio_s": 7.18
+       },
+       {
+        "id": "s1lm4",
+        "text": "Point your .theta name at the Home card, and people can visit your site in Wave Web.",
+        "audio": "https://bots.oswave.io/media/wave-build-voice/s1lm4.mp3",
+        "audio_s": 4.42
+       },
+       {
+        "id": "s1lm5",
+        "text": "To update it later, mint new versions of the pages that changed. Ready when you are.",
+        "audio": "https://bots.oswave.io/media/wave-build-voice/s1lm5.mp3",
+        "audio_s": 4.73
+       }
+      ]
+     }
     },
     {
      "id": "s2",
@@ -214,10 +284,39 @@
    "steps": [
     {
      "id": "m1",
-     "text": "Let's move your data to Wave. Where is it coming from? Pick a source below, or type it.",
+     "text": "Let's move your data to Wave. Want to know more first? Click Learn more. Otherwise, where is it coming from? Pick a source below, or type it.",
      "advance_on": "source_picked",
-     "audio": "https://bots.oswave.io/media/wave-build-voice/m1.mp3",
-     "audio_s": 4.78
+     "audio": "https://bots.oswave.io/media/wave-build-voice/m1.mp3?v=2",
+     "audio_s": 8.09,
+     "learn_more": {
+      "label": "Learn more",
+      "steps": [
+       {
+        "id": "m1lm1",
+        "text": "A migration moves your data from another app, like ChatGPT, Notion or Obsidian, into Wave cards.",
+        "audio": "https://bots.oswave.io/media/wave-build-voice/m1lm1.mp3",
+        "audio_s": 6.91
+       },
+       {
+        "id": "m1lm2",
+        "text": "Wave splits it into one-idea cards. You review everything and remove what you don't want before anything goes on chain.",
+        "audio": "https://bots.oswave.io/media/wave-build-voice/m1lm2.mp3",
+        "audio_s": 6.82
+       },
+       {
+        "id": "m1lm3",
+        "text": "You choose private or public. Private cards are encrypted in Wave Wallet Mint, so only you can read them.",
+        "audio": "https://bots.oswave.io/media/wave-build-voice/m1lm3.mp3",
+        "audio_s": 5.93
+       },
+       {
+        "id": "m1lm4",
+        "text": "Once minted, your memories belong to you, not to any app. Any AI you connect, like Hermes, can recall the ones you share with it. Ready when you are.",
+        "audio": "https://bots.oswave.io/media/wave-build-voice/m1lm4.mp3",
+        "audio_s": 9.41
+       }
+      ]
+     }
     },
     {
      "id": "m2",
