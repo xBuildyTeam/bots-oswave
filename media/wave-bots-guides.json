@@ -1,0 +1,267 @@
+{
+ "schema": "wave.chatguide/1",
+ "app": "Wave Bots (bot page)",
+ "speaker": "Wave",
+ "voice": {
+  "name": "Andrew",
+  "note": "Pre-recorded, en-US-AndrewNeural, one clip per step."
+ },
+ "how_to_use": "Same engine as wave-build-guides.json. Each flow is a list of steps; show a step as an assistant message from Wave (typed ~45 chars/s, instant with reduced motion) and play its audio. 'advance_on' lists events separated by |: 'auto' shows the next step right after this one has played, 'next' is the Next button, 'end' is the last step. 'open_tab' (optional) shows an 'Open the <tab> tab' button that switches to that tab. 'learn_more' {label, steps} shows a Learn more button right of Skip guide that plays those steps, then returns. 'Guide me through this tab' plays the tab_<current tab> flow. Events: info_saved, cards_added, customize_saved, rules_saved, listing_saved, dry_run_done, publish_done, name_pointed. If an app can't see an event, the step also accepts next.",
+ "flows": {
+  "build": {
+   "chip": "Build my bot",
+   "steps": [
+    {
+     "id": "b1",
+     "text": "Let's build your bot, one tab at a time. Want to know more first? Click Learn more.",
+     "advance_on": "auto",
+     "audio": "https://bots.oswave.io/media/wave-bots-voice/b1.mp3",
+     "audio_s": 4.66,
+     "learn_more": {
+      "label": "Learn more",
+      "steps": [
+       {
+        "id": "b1lm1",
+        "text": "Every Wave bot lives on the Theta blockchain: its name, rules, look and knowledge, all signed by you.",
+        "audio": "https://bots.oswave.io/media/wave-bots-voice/b1lm1.mp3",
+        "audio_s": 6.77
+       },
+       {
+        "id": "b1lm2",
+        "text": "That means anyone can check it's the real bot, and nobody can quietly change it. Not even Wave.",
+        "audio": "https://bots.oswave.io/media/wave-bots-voice/b1lm2.mp3",
+        "audio_s": 5.59
+       },
+       {
+        "id": "b1lm3",
+        "text": "Updates add a new version on chain. Old versions stay, marked replaced. You can replace, but never delete.",
+        "audio": "https://bots.oswave.io/media/wave-bots-voice/b1lm3.mp3",
+        "audio_s": 6.82
+       },
+       {
+        "id": "b1lm4",
+        "text": "People can use your bot in Wave Web and Wave OS, and AI apps can ask it through Wave. Ready when you are.",
+        "audio": "https://bots.oswave.io/media/wave-bots-voice/b1lm4.mp3",
+        "audio_s": 6.19
+       }
+      ]
+     }
+    },
+    {
+     "id": "b2",
+     "text": "Start with Info: give your bot a name, a short About, and a personality, the way it should talk.",
+     "advance_on": "info_saved",
+     "audio": "https://bots.oswave.io/media/wave-bots-voice/b2.mp3",
+     "audio_s": 5.69,
+     "open_tab": "Info"
+    },
+    {
+     "id": "b3",
+     "text": "Now Cards. These are what your bot knows. Add a migration with your notes, documents or a Maker recipe. One idea per card.",
+     "advance_on": "cards_added|next",
+     "audio": "https://bots.oswave.io/media/wave-bots-voice/b3.mp3",
+     "audio_s": 7.78,
+     "open_tab": "Cards"
+    },
+    {
+     "id": "b4",
+     "text": "Customize is the fun part: pick a color, draw or import a mascot, and choose its animations.",
+     "advance_on": "customize_saved|next",
+     "audio": "https://bots.oswave.io/media/wave-bots-voice/b4.mp3",
+     "audio_s": 6.36,
+     "open_tab": "Customize"
+    },
+    {
+     "id": "b5",
+     "text": "In Rules, choose who can use it: public and free, paid per answer, or private for wallets you allow.",
+     "advance_on": "rules_saved",
+     "audio": "https://bots.oswave.io/media/wave-bots-voice/b5.mp3",
+     "audio_s": 6.62,
+     "open_tab": "Rules"
+    },
+    {
+     "id": "b6",
+     "text": "Listing is how people find it: a one-line pitch, a category and tags. Fill from cards can write a first draft.",
+     "advance_on": "listing_saved|next",
+     "audio": "https://bots.oswave.io/media/wave-bots-voice/b6.mp3",
+     "audio_s": 7.01,
+     "open_tab": "Listing"
+    },
+    {
+     "id": "b7",
+     "text": "Last stop, Publish. Try Test without minting first. It runs every check and shows the price, and nothing is signed.",
+     "advance_on": "dry_run_done",
+     "audio": "https://bots.oswave.io/media/wave-bots-voice/b7.mp3",
+     "audio_s": 7.44,
+     "open_tab": "Publish"
+    },
+    {
+     "id": "b8",
+     "text": "When it's ready, click Publish. One button mints only what changed, points your name and checks it's live. You approve in your wallet.",
+     "advance_on": "publish_done",
+     "audio": "https://bots.oswave.io/media/wave-bots-voice/b8.mp3",
+     "audio_s": 7.82,
+     "open_tab": "Publish"
+    },
+    {
+     "id": "b9",
+     "text": "Your bot is live on Theta! Share its link, or submit it to the bots.theta store from the Publish tab.",
+     "advance_on": "end",
+     "audio": "https://bots.oswave.io/media/wave-bots-voice/b9.mp3",
+     "audio_s": 5.86
+    }
+   ]
+  },
+  "publish": {
+   "chip": "Publish my bot",
+   "steps": [
+    {
+     "id": "u1",
+     "text": "Let's put your bot on Theta. Want to know what publishing does? Click Learn more.",
+     "advance_on": "auto",
+     "audio": "https://bots.oswave.io/media/wave-bots-voice/u1.mp3",
+     "audio_s": 4.1,
+     "open_tab": "Publish",
+     "learn_more": {
+      "label": "Learn more",
+      "steps": [
+       {
+        "id": "u1lm1",
+        "text": "Publishing mints your bot's cards to Theta: its look, rules and knowledge, plus a listing that ties them together.",
+        "audio": "https://bots.oswave.io/media/wave-bots-voice/u1lm1.mp3",
+        "audio_s": 6.72
+       },
+       {
+        "id": "u1lm2",
+        "text": "Only what changed gets minted, so updates cost less than the first publish. You see the total in TFUEL before you approve.",
+        "audio": "https://bots.oswave.io/media/wave-bots-voice/u1lm2.mp3",
+        "audio_s": 7.18
+       },
+       {
+        "id": "u1lm3",
+        "text": "Wave Wallet Mint signs with your own wallet. Your keys never leave it, and private cards are encrypted there first.",
+        "audio": "https://bots.oswave.io/media/wave-bots-voice/u1lm3.mp3",
+        "audio_s": 6.24
+       },
+       {
+        "id": "u1lm4",
+        "text": "Then your .theta name points to the new version, so everyone gets the latest. Ready when you are.",
+        "audio": "https://bots.oswave.io/media/wave-bots-voice/u1lm4.mp3",
+        "audio_s": 5.54
+       }
+      ]
+     }
+    },
+    {
+     "id": "u2",
+     "text": "First, Test without minting. It runs every check and shows the price, and nothing is signed.",
+     "advance_on": "dry_run_done",
+     "audio": "https://bots.oswave.io/media/wave-bots-voice/u2.mp3",
+     "audio_s": 5.88,
+     "open_tab": "Publish"
+    },
+    {
+     "id": "u3",
+     "text": "Fix any amber rows. Everything green? Then click Publish and approve in your wallet.",
+     "advance_on": "publish_done",
+     "audio": "https://bots.oswave.io/media/wave-bots-voice/u3.mp3",
+     "audio_s": 4.99,
+     "open_tab": "Publish"
+    },
+    {
+     "id": "u4",
+     "text": "No .theta name yet? Prove you own one, or request a free bots.theta name. Wave reviews every request.",
+     "advance_on": "next|name_pointed",
+     "audio": "https://bots.oswave.io/media/wave-bots-voice/u4.mp3",
+     "audio_s": 7.2,
+     "open_tab": "Publish"
+    },
+    {
+     "id": "u5",
+     "text": "Done! To show it in the store, submit it to the curator. Once approved, it appears in bots.theta.",
+     "advance_on": "end",
+     "audio": "https://bots.oswave.io/media/wave-bots-voice/u5.mp3",
+     "audio_s": 6.19
+    }
+   ]
+  },
+  "tab_info": {
+   "chip": "Guide me through this tab",
+   "tab": "Info",
+   "steps": [
+    {
+     "id": "t_info",
+     "text": "Info is your bot's identity: name, About and personality. The personality is how it talks, not what it knows. Save when you're done.",
+     "advance_on": "end",
+     "audio": "https://bots.oswave.io/media/wave-bots-voice/t_info.mp3",
+     "audio_s": 8.45
+    }
+   ]
+  },
+  "tab_cards": {
+   "chip": "Guide me through this tab",
+   "tab": "Cards",
+   "steps": [
+    {
+     "id": "t_cards",
+     "text": "Cards are your bot's knowledge, one idea per card. Add a migration to bring in notes or a recipe. Public cards anyone can read; private cards are encrypted in Wave Wallet Mint.",
+     "advance_on": "end",
+     "audio": "https://bots.oswave.io/media/wave-bots-voice/t_cards.mp3",
+     "audio_s": 11.21
+    }
+   ]
+  },
+  "tab_customize": {
+   "chip": "Guide me through this tab",
+   "tab": "Customize",
+   "steps": [
+    {
+     "id": "t_customize",
+     "text": "Customize sets the look: color, mascot and animations. Your mascot is minted with your bot, so it's the same everywhere.",
+     "advance_on": "end",
+     "audio": "https://bots.oswave.io/media/wave-bots-voice/t_customize.mp3",
+     "audio_s": 7.82
+    }
+   ]
+  },
+  "tab_rules": {
+   "chip": "Guide me through this tab",
+   "tab": "Rules",
+   "steps": [
+    {
+     "id": "t_rules",
+     "text": "Rules decide who can use your bot: public and free, paid per answer, or private for wallets and names you allow. They're minted as your bot's rules card when you publish.",
+     "advance_on": "end",
+     "audio": "https://bots.oswave.io/media/wave-bots-voice/t_rules.mp3",
+     "audio_s": 10.06
+    }
+   ]
+  },
+  "tab_listing": {
+   "chip": "Guide me through this tab",
+   "tab": "Listing",
+   "steps": [
+    {
+     "id": "t_listing",
+     "text": "Listing is your store page: a one-line pitch, a category and tags. It's optional. Unlisted bots still work by name and link.",
+     "advance_on": "end",
+     "audio": "https://bots.oswave.io/media/wave-bots-voice/t_listing.mp3",
+     "audio_s": 8.78
+    }
+   ]
+  },
+  "tab_publish": {
+   "chip": "Guide me through this tab",
+   "tab": "Publish",
+   "steps": [
+    {
+     "id": "t_publish",
+     "text": "Publish does everything in one go: it checks your bot, mints only what changed, points your name and confirms it's live. Try Test without minting first.",
+     "advance_on": "end",
+     "audio": "https://bots.oswave.io/media/wave-bots-voice/t_publish.mp3",
+     "audio_s": 9.41
+    }
+   ]
+  }
+ }
+}
