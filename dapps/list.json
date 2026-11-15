@@ -1,0 +1,5 @@
+{
+  "schema": "wave.dapps-list/1",
+  "about": "The <app>.dapps.theta names Wave checks for the dapps.theta store. Each name must point (TNS text wave.dapp = v3:N) at a public wave.dapp/1 card minted by the name's owner, or the store shows it as Updating.",
+  "names": []
+}
