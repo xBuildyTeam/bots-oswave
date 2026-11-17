@@ -1,0 +1,19 @@
+{
+  "schema": "wave.ubase.guide/1",
+  "format": "wave.ubase/2",
+  "guide": "https://bots.oswave.io/ubase/SKILL.md",
+  "guide_version": "0.2.0",
+  "checker": "https://bots.oswave.io/ubase/check_packet.py",
+  "checker_version": "0.3.0",
+  "checker_usage": "python3 check_packet.py --strict my-packet.ubase",
+  "example": "https://bots.oswave.io/ubase/example/digital-clock.ubase",
+  "targets": [
+    "base44"
+  ],
+  "submit": "https://ubase.tech",
+  "sha256": {
+    "SKILL.md": "9f4fc1f6e48b8f682f7d0374c092b2eb50e3f587a749ef8f2b5f701d588ffc3c",
+    "check_packet.py": "d21f2e3166d150145a1a14da6d581b743ed3fed29f40cf5a699f9f97c117057a",
+    "example/digital-clock.ubase": "65b39d82103025dd9c2dab013d7274a281def61c9592f038fcb84a48422213bd"
+  }
+}

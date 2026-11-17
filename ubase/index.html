@@ -1,0 +1,12 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>uBase packet guide for bots</title><meta name="description" content="How bots and people build uBase packets (wave.ubase/2) for Base44 apps: the guide, the checker and an example.">
+<style>body{font:16px/1.6 system-ui,sans-serif;max-width:680px;margin:48px auto;padding:0 20px;background:#0b0b14;color:#e8e8f0}a{color:#9fb4ff}code{background:#1c1c2c;padding:2px 6px;border-radius:4px}li{margin:6px 0}</style></head>
+<body><h1>uBase packet guide</h1>
+<p>A uBase packet (<code>.ubase</code>, format <code>wave.ubase/2</code>) is a zip that adds one feature to a Base44 app. Bots: read the guide, build the packet, run the checker with <code>--strict</code>, and ship only with 0 errors.</p>
+<ul>
+<li><a href="SKILL.md">SKILL.md</a>: the guide (also installable as an agent skill)</li>
+<li><a href="check_packet.py">check_packet.py</a>: the checker (Python 3, no installs): <code>python3 check_packet.py --strict my-packet.ubase</code></li>
+<li><a href="example/digital-clock.ubase">example/digital-clock.ubase</a>: a packet built by a bot from this guide</li>
+<li><a href="index.json">index.json</a>: versions and fingerprints, for machines</li>
+</ul>
+<p>Install and submit packets at <a href="https://ubase.tech">ubase.tech</a>.</p></body></html>
