@@ -7,6 +7,10 @@
 <script src="https://web.oswave.io/functions/widget" data-wave="clerk.bots.theta" data-mode="inline" data-embed-url="https://web.oswave.io/functions/embedDoesNotExist" data-name="Fallback test"></script>
 <h2>3. Plain iframe, Checker bot, dark</h2>
 <iframe src="https://web.oswave.io/functions/embed?b=checker&theme=dark" style="width:100%;height:520px;border:0" title="Checker on Wave"></iframe>
+<h2>5. Swap, plain iframe (diagnostic)</h2>
+<iframe src="https://web.oswave.io/functions/embed?d=swap&theme=light" style="width:100%;height:640px;border:1px solid #ccc" title="Swap on Wave"></iframe>
+<pre id="msgs" style="font-size:12px;background:#f4f4f5;padding:8px">messages from web.oswave.io:</pre>
+<script>addEventListener("message",function(e){if(e.origin==="https://web.oswave.io")document.getElementById("msgs").textContent+="\n"+JSON.stringify(e.data).slice(0,120)})</script>
 <h2>4. Clerk bot, button mode (bottom right)</h2>
 <script src="https://web.oswave.io/functions/widget" data-wave="clerk.bots.theta" data-mode="button"></script>
 </body></html>
